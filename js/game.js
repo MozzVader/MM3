@@ -286,7 +286,11 @@
 
     // --- Input del Jugador ---
 
-    function onGemClick(row, col) {\n        if (isProcessing) return;\n        if (isDragging) return; // Ignorar click si fue un drag\n        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return;\n        if (board[row][col] === null) return;
+    function onGemClick(row, col) {
+        if (isProcessing) return;
+        if (isDragging) return; // Ignorar click si fue un drag
+        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return;
+        if (board[row][col] === null) return;
 
         clearHintTimer();
 
