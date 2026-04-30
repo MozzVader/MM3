@@ -1,0 +1,194 @@
+/* ============================================
+   Mini Arcade - Estilos Globales Compartidos
+   ============================================ */
+
+/* --- Variables y Reset --- */
+:root {
+    --bg-dark: #111114;
+    --bg-card: #1a1a1f;
+    --bg-board: #1e1e24;
+    --bg-cell: rgba(255, 255, 255, 0.04);
+    --accent: #ff6b35;
+    --accent-glow: rgba(255, 107, 53, 0.4);
+    --text-primary: #fffffe;
+    --text-secondary: #a7a9be;
+    --text-muted: #6b6d8a;
+
+    --transition-speed: 0.25s;
+    --grid-color: rgba(255, 255, 255, 0.025);
+    --grid-dot: rgba(255, 255, 255, 0.06);
+
+    /* Glassmorphism base */
+    --glass-bg: rgba(26, 26, 31, 0.35);
+    --glass-blur: 24px;
+    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    --glass-inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    --glass-inset-bottom: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+
+    /* Gem colors */
+    --gem-red: #ff4757;
+    --gem-red-light: #ff6b81;
+    --gem-blue: #3742fa;
+    --gem-blue-light: #5352ed;
+    --gem-green: #2ed573;
+    --gem-green-light: #7bed9f;
+    --gem-yellow: #ffa502;
+    --gem-yellow-light: #ffbe76;
+    --gem-purple: #a55eea;
+    --gem-purple-light: #c56cf0;
+    --gem-orange: #ff6348;
+    --gem-orange-light: #ff7979;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* --- Animated Background (shared) --- */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+        radial-gradient(circle, var(--grid-dot) 1px, transparent 1px);
+    background-size: 32px 32px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(600px circle at 15% 25%, rgba(255, 107, 53, 0.15), transparent 60%),
+        radial-gradient(500px circle at 85% 15%, rgba(165, 94, 234, 0.15), transparent 60%),
+        radial-gradient(400px circle at 50% 85%, rgba(55, 66, 250, 0.12), transparent 60%),
+        radial-gradient(350px circle at 75% 70%, rgba(46, 213, 115, 0.10), transparent 60%),
+        radial-gradient(300px circle at 25% 60%, rgba(255, 71, 87, 0.08), transparent 60%);
+    z-index: 0;
+    pointer-events: none;
+    animation: bgShift 20s ease-in-out infinite alternate;
+}
+
+@keyframes bgShift {
+    0% { opacity: 1; transform: scale(1) translate(0, 0); }
+    50% { opacity: 0.85; transform: scale(1.08) translate(1%, -1%); }
+    100% { opacity: 1; transform: scale(1) translate(-1%, 1%); }
+}
+
+/* --- Glassmorphism Utility Classes --- */
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(1.5);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    box-shadow:
+        var(--glass-shadow),
+        var(--glass-inset-top),
+        var(--glass-inset-bottom);
+}
+
+.glass-sm {
+    background: rgba(26, 26, 31, 0.3);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.3),
+        var(--glass-inset-top);
+}
+
+.glass-dark {
+    background: rgba(10, 10, 20, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* --- Buttons (shared) --- */
+.btn {
+    padding: 14px 48px;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    letter-spacing: 0.5px;
+    min-width: 220px;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent), #e85d2c);
+    color: white;
+    box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 30px var(--accent-glow);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255, 107, 53, 0.08);
+}
+
+/* --- Screens --- */
+.screen {
+    display: none;
+}
+.screen.active {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- Animations (shared) --- */
+@keyframes slideInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
