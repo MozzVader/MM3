@@ -9,9 +9,9 @@
     --gap: 4px;
     --board-padding: 12px;
 
-    --bg-dark: #0a0a14;
-    --bg-card: #151530;
-    --bg-board: #1c1c3a;
+    --bg-dark: #111114;
+    --bg-card: #1a1a1f;
+    --bg-board: #1e1e24;
     --bg-cell: rgba(255, 255, 255, 0.04);
     --accent: #ff6b35;
     --accent-glow: rgba(255, 107, 53, 0.4);
@@ -66,23 +66,26 @@ body::before {
     pointer-events: none;
 }
 
+/* Blobs de color - hacen que el glassmorphism sea visible */
 body::after {
     content: '';
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse at 20% 20%, rgba(255, 107, 53, 0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(165, 94, 234, 0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(55, 66, 250, 0.03) 0%, transparent 60%);
+        radial-gradient(600px circle at 15% 25%, rgba(255, 107, 53, 0.15), transparent 60%),
+        radial-gradient(500px circle at 85% 15%, rgba(165, 94, 234, 0.15), transparent 60%),
+        radial-gradient(400px circle at 50% 85%, rgba(55, 66, 250, 0.12), transparent 60%),
+        radial-gradient(350px circle at 75% 70%, rgba(46, 213, 115, 0.10), transparent 60%),
+        radial-gradient(300px circle at 25% 60%, rgba(255, 71, 87, 0.08), transparent 60%);
     z-index: 0;
     pointer-events: none;
-    animation: bgShift 25s ease-in-out infinite alternate;
+    animation: bgShift 20s ease-in-out infinite alternate;
 }
 
 @keyframes bgShift {
-    0% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.05); }
-    100% { opacity: 1; transform: scale(1); }
+    0% { opacity: 1; transform: scale(1) translate(0, 0); }
+    50% { opacity: 0.85; transform: scale(1.08) translate(1%, -1%); }
+    100% { opacity: 1; transform: scale(1) translate(-1%, 1%); }
 }
 
 /* --- App Container --- */
@@ -118,16 +121,15 @@ body::after {
     text-align: center;
     width: 100%;
     padding: 40px 20px;
-    background: rgba(21, 21, 48, 0.45);
-    backdrop-filter: blur(20px) saturate(1.3);
-    -webkit-backdrop-filter: blur(20px) saturate(1.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(26, 26, 31, 0.35);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 24px;
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.3),
-        0 0 80px rgba(255, 107, 53, 0.05),
-        0 0 120px rgba(165, 94, 234, 0.04),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
 .game-title {
@@ -281,14 +283,14 @@ body::after {
     width: 100%;
     margin-bottom: 10px;
     padding: 10px 8px;
-    background: rgba(21, 21, 48, 0.55);
-    backdrop-filter: blur(16px) saturate(1.4);
-    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    background: rgba(26, 26, 31, 0.3);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
     border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow:
         0 4px 24px rgba(0, 0, 0, 0.3),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .header-item {
@@ -347,16 +349,15 @@ body::after {
     grid-template-rows: repeat(8, var(--cell-size));
     gap: var(--gap);
     padding: var(--board-padding);
-    background: rgba(28, 28, 58, 0.45);
-    backdrop-filter: blur(20px) saturate(1.3);
-    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    background: rgba(26, 26, 31, 0.3);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow:
         0 8px 40px rgba(0, 0, 0, 0.5),
-        0 0 60px rgba(255, 107, 53, 0.05),
-        0 0 100px rgba(165, 94, 234, 0.04),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
     position: relative;
     user-select: none;
     -webkit-user-select: none;
@@ -601,8 +602,10 @@ body::after {
 }
 
 .overlay-content {
-    background: var(--bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(26, 26, 31, 0.35);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 24px;
     padding: 44px 40px;
     text-align: center;
@@ -610,7 +613,8 @@ body::after {
     width: 90%;
     box-shadow:
         0 20px 60px rgba(0, 0, 0, 0.5),
-        0 0 80px rgba(255, 107, 53, 0.05);
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
 .overlay-content h2 {
