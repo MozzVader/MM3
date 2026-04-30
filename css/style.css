@@ -270,7 +270,7 @@ body::after {
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* --- Header del Juego --- */
+/* --- Header del Juego (Glassmorphism) --- */
 .game-header {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -278,9 +278,14 @@ body::after {
     width: 100%;
     margin-bottom: 10px;
     padding: 10px 8px;
-    background: var(--bg-card);
+    background: rgba(21, 21, 48, 0.55);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
     border-radius: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .header-item {
@@ -332,24 +337,27 @@ body::after {
     100% { background-position: 200% 0%; }
 }
 
-/* --- Tablero de Juego --- */
+/* --- Tablero de Juego (Glassmorphism) --- */
 .game-board {
     display: grid;
     grid-template-columns: repeat(8, var(--cell-size));
     grid-template-rows: repeat(8, var(--cell-size));
     gap: var(--gap);
     padding: var(--board-padding);
-    background: var(--bg-board);
+    background: rgba(28, 28, 58, 0.45);
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
     border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow:
         0 8px 40px rgba(0, 0, 0, 0.5),
-        0 0 60px rgba(255, 107, 53, 0.04),
-        0 0 100px rgba(165, 94, 234, 0.03),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        0 0 60px rgba(255, 107, 53, 0.05),
+        0 0 100px rgba(165, 94, 234, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
     position: relative;
     user-select: none;
     -webkit-user-select: none;
+    touch-action: none;
 }
 
 /* --- Celdas de fondo del tablero --- */
@@ -391,6 +399,20 @@ body::after {
 
 .gem.hint {
     animation: hintPulse 1s ease-in-out infinite;
+}
+
+/* --- Gem Drag & Drop --- */
+.gem.dragging {
+    z-index: 10;
+    transform: scale(1.15);
+    cursor: grabbing;
+    transition: none;
+    filter: brightness(1.2);
+}
+
+.gem.drag-target {
+    transform: scale(0.9);
+    opacity: 0.6;
 }
 
 /* --- Gem Shapes (CSS) --- */

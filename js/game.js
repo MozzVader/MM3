@@ -48,6 +48,10 @@
     let gemTypesInLevel = 6;
     let hintTimeout = null;
 
+    // --- Drag & Drop State ---
+    let isDragging = false;
+    let dragGem = null;       // { row, col, el, startX, startY }
+
     // --- Referencias DOM ---
     const $ = (sel) => document.querySelector(sel);
     const startScreen = $('#start-screen');
@@ -254,7 +258,12 @@
         inner.className = 'gem-inner';
         gem.appendChild(inner);
 
+        // Click handler
         gem.addEventListener('click', () => onGemClick(row, col));
+
+        // Drag & Drop handlers (pointer events = mouse + touch)
+        gem.addEventListener('pointerdown', (e) => onDragStart(e, row, col));
+
         return gem;
     }
 
@@ -277,10 +286,7 @@
 
     // --- Input del Jugador ---
 
-    function onGemClick(row, col) {
-        if (isProcessing) return;
-        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return;
-        if (board[row][col] === null) return;
+    function onGemClick(row, col) {\n        if (isProcessing) return;\n        if (isDragging) return; // Ignorar click si fue un drag\n        if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return;\n        if (board[row][col] === null) return;
 
         clearHintTimer();
 
@@ -320,6 +326,144 @@
 
     function clearHintHighlight() {
         gameBoard.querySelectorAll('.gem.hint').forEach(g => g.classList.remove('hint'));
+    }
+
+    // --- Drag & Drop ---
+
+    function onDragStart(e, row, col) {
+        if (isProcessing) return;
+        if (board[row][col] === null) return;
+        // Prevenir default para evitar scroll en touch
+        e.preventDefault();
+
+        const el = gameBoard.children[row * BOARD_SIZE + col];
+        if (!el) return;
+
+        clearHintTimer();
+        clearSelection();
+
+        // Marcar que se inicio un drag
+        isDragging = true;
+        dragGem = {
+            row, col, el,
+            startX: e.clientX,
+            startY: e.clientY,
+            currentDx: 0,
+            currentDy: 0
+        };
+
+        el.classList.add('dragging');
+        el.setPointerCapture(e.pointerId);
+
+        el.addEventListener('pointermove', onDragMove);
+        el.addEventListener('pointerup', onDragEnd);
+        el.addEventListener('pointercancel', onDragEnd);
+    }
+
+    function onDragMove(e) {
+        if (!isDragging || !dragGem) return;
+        e.preventDefault();
+
+        const dx = e.clientX - dragGem.startX;
+        const dy = e.clientY - dragGem.startY;
+
+        // Calcular el snap: solo permitir movimiento de 1 celda maximo
+        const cellSize = dragGem.el.offsetWidth + parseInt(getComputedStyle(gameBoard).gap) || 4;
+        const maxDist = cellSize;
+
+        // Snap: limitar a 1 celda en el eje dominante
+        let snapDx = 0;
+        let snapDy = 0;
+
+        if (Math.abs(dx) > Math.abs(dy)) {
+            // Movimiento horizontal dominante
+            snapDx = Math.max(-maxDist, Math.min(maxDist, dx));
+            // Snap si paso el 40% de la celda
+            if (Math.abs(snapDx) > maxDist * 0.4) {
+                snapDx = Math.sign(snapDx) * maxDist;
+            } else {
+                snapDx = 0;
+            }
+        } else {
+            // Movimiento vertical dominante
+            snapDy = Math.max(-maxDist, Math.min(maxDist, dy));
+            if (Math.abs(snapDy) > maxDist * 0.4) {
+                snapDy = Math.sign(snapDy) * maxDist;
+            } else {
+                snapDy = 0;
+            }
+        }
+
+        dragGem.currentDx = snapDx;
+        dragGem.currentDy = snapDy;
+
+        // Mover visualmente la gem
+        dragGem.el.style.transform = `translate(${snapDx}px, ${snapDy}px) scale(1.15)`;
+
+        // Marcar la gem destino si es valida
+        clearDragTarget();
+        const target = getDragTarget();
+        if (target) {
+            const targetIdx = target.row * BOARD_SIZE + target.col;
+            const targetEl = gameBoard.children[targetIdx];
+            if (targetEl) targetEl.classList.add('drag-target');
+        }
+    }
+
+    function onDragEnd(e) {
+        if (!isDragging || !dragGem) return;
+
+        const el = dragGem.el;
+        el.removeEventListener('pointermove', onDragMove);
+        el.removeEventListener('pointerup', onDragEnd);
+        el.removeEventListener('pointercancel', onDragEnd);
+
+        el.classList.remove('dragging');
+        clearDragTarget();
+
+        // Determinar target basado en snap final
+        const target = getDragTarget();
+
+        if (target && isAdjacent(dragGem.row, dragGem.col, target.row, target.col)) {
+            // Hacer el swap
+            isDragging = false;
+            attemptSwap(dragGem.row, dragGem.col, target.row, target.col);
+        } else {
+            // Volver a posicion original con animacion
+            el.style.transition = 'transform 0.15s ease-out';
+            el.style.transform = '';
+            setTimeout(() => {
+                el.style.transition = '';
+            }, 150);
+            isDragging = false;
+        }
+
+        dragGem = null;
+    }
+
+    function getDragTarget() {
+        if (!dragGem) return null;
+        const cellSize = dragGem.el.offsetWidth + parseInt(getComputedStyle(gameBoard).gap) || 4;
+
+        if (Math.abs(dragGem.currentDx) >= cellSize * 0.4 || Math.abs(dragGem.currentDy) >= cellSize * 0.4) {
+            // Determinar direccion dominante
+            if (Math.abs(dragGem.currentDx) > Math.abs(dragGem.currentDy)) {
+                const dirCol = dragGem.col + Math.sign(dragGem.currentDx);
+                if (dirCol >= 0 && dirCol < BOARD_SIZE) {
+                    return { row: dragGem.row, col: dirCol };
+                }
+            } else {
+                const dirRow = dragGem.row + Math.sign(dragGem.currentDy);
+                if (dirRow >= 0 && dirRow < BOARD_SIZE) {
+                    return { row: dirRow, col: dragGem.col };
+                }
+            }
+        }
+        return null;
+    }
+
+    function clearDragTarget() {
+        gameBoard.querySelectorAll('.gem.drag-target').forEach(g => g.classList.remove('drag-target'));
     }
 
     function isAdjacent(r1, c1, r2, c2) {
