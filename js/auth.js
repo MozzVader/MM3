@@ -175,6 +175,24 @@
         showLoggedOutUI();
     }
 
+    async function signInWithGoogle() {
+        if (!sb) {
+            showAuthError('login', 'Error de conexion. Intenta de nuevo.');
+            return;
+        }
+
+        const { error } = await sb.auth.signInWithOAuth({
+            provider: 'google',
+            options: {
+                redirectTo: window.location.origin + window.location.pathname
+            }
+        });
+
+        if (error) {
+            showAuthError('login', translateError(error.message));
+        }
+    }
+
     // --- Error Handling ---
 
     function showAuthError(form, message) {
@@ -286,6 +304,12 @@
         // Logout
         const logoutBtn = $('#logout-btn');
         if (logoutBtn) logoutBtn.addEventListener('click', signOut);
+
+        // Google sign in buttons
+        const googleLogin = $('#btn-google-login');
+        const googleRegister = $('#btn-google-register');
+        if (googleLogin) googleLogin.addEventListener('click', signInWithGoogle);
+        if (googleRegister) googleRegister.addEventListener('click', signInWithGoogle);
 
         // User menu toggle (mobile)
         const userMenuBtn = $('#user-menu-btn');
