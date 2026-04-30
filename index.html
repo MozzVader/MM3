@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MM3 - Match 3 Puzzle</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💎</text></svg>">
+</head>
+<body>
+    <div id="app">
+        <!-- Pantalla de inicio -->
+        <div id="start-screen" class="screen active">
+            <div class="start-content">
+                <h1 class="game-title">MM3</h1>
+                <p class="game-subtitle">Match 3 Puzzle</p>
+                <div class="start-menu">
+                    <button id="btn-new-game" class="btn btn-primary">Nueva Partida</button>
+                    <button id="btn-continue" class="btn btn-secondary" style="display:none;">Continuar</button>
+                </div>
+                <div class="high-score-display">
+                    <span>Mejor Puntuacion:</span>
+                    <span id="high-score-value">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla de juego -->
+        <div id="game-screen" class="screen">
+            <header class="game-header">
+                <div class="header-item">
+                    <span class="header-label">Nivel</span>
+                    <span id="current-level" class="header-value">1</span>
+                </div>
+                <div class="header-item">
+                    <span class="header-label">Puntos</span>
+                    <span id="current-score" class="header-value">0</span>
+                </div>
+                <div class="header-item">
+                    <span class="header-label">Objetivo</span>
+                    <span id="target-score" class="header-value">500</span>
+                </div>
+                <div class="header-item">
+                    <span class="header-label">Movimientos</span>
+                    <span id="moves-left" class="header-value">20</span>
+                </div>
+            </header>
+
+            <!-- Barra de progreso -->
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+            </div>
+
+            <!-- Tablero de juego -->
+            <div id="game-board" class="game-board"></div>
+
+            <!-- Mensaje de combo -->
+            <div id="combo-message" class="combo-message"></div>
+        </div>
+
+        <!-- Overlay de nivel completado -->
+        <div id="level-complete" class="overlay">
+            <div class="overlay-content">
+                <h2>Nivel Completado!</h2>
+                <div class="level-stats">
+                    <p>Puntuacion: <span id="level-score">0</span></p>
+                    <p>Movimientos restantes: <span id="level-moves">0</span></p>
+                </div>
+                <button id="btn-next-level" class="btn btn-primary">Siguiente Nivel</button>
+            </div>
+        </div>
+
+        <!-- Overlay de game over -->
+        <div id="game-over" class="overlay">
+            <div class="overlay-content">
+                <h2>Se Acabaron los Movimientos!</h2>
+                <div class="level-stats">
+                    <p>Puntuacion Final: <span id="final-score">0</span></p>
+                    <p>Nivel Alcanzado: <span id="final-level">1</span></p>
+                </div>
+                <button id="btn-retry" class="btn btn-primary">Reintentar Nivel</button>
+                <button id="btn-back-menu" class="btn btn-secondary">Menu Principal</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/game.js"></script>
+</body>
+</html>
