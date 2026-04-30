@@ -9,9 +9,10 @@
     --gap: 4px;
     --board-padding: 12px;
 
-    --bg-dark: #0f0e17;
-    --bg-card: #1a1932;
-    --bg-board: #232347;
+    --bg-dark: #0a0a14;
+    --bg-card: #151530;
+    --bg-board: #1c1c3a;
+    --bg-cell: rgba(255, 255, 255, 0.04);
     --accent: #ff6b35;
     --accent-glow: rgba(255, 107, 53, 0.4);
     --text-primary: #fffffe;
@@ -32,6 +33,8 @@
     --gem-orange-light: #ff7979;
 
     --transition-speed: 0.25s;
+    --grid-color: rgba(255, 255, 255, 0.025);
+    --grid-dot: rgba(255, 255, 255, 0.06);
 }
 
 * {
@@ -51,23 +54,35 @@ body {
     align-items: center;
 }
 
-/* --- Fondo animado sutil --- */
+/* --- Grid Background --- */
 body::before {
     content: '';
     position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at 30% 30%, rgba(255, 107, 53, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 70% 70%, rgba(165, 94, 234, 0.05) 0%, transparent 50%);
-    animation: bgShift 20s ease-in-out infinite alternate;
-    z-index: -1;
+    inset: 0;
+    background-image:
+        radial-gradient(circle, var(--grid-dot) 1px, transparent 1px);
+    background-size: 32px 32px;
+    z-index: 0;
+    pointer-events: none;
+}
+
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 20%, rgba(255, 107, 53, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(165, 94, 234, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(55, 66, 250, 0.03) 0%, transparent 60%);
+    z-index: 0;
+    pointer-events: none;
+    animation: bgShift 25s ease-in-out infinite alternate;
 }
 
 @keyframes bgShift {
-    0% { transform: translate(0, 0) rotate(0deg); }
-    100% { transform: translate(2%, 2%) rotate(3deg); }
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
 /* --- App Container --- */
@@ -76,6 +91,7 @@ body::before {
     max-width: 520px;
     padding: 16px;
     position: relative;
+    z-index: 1;
 }
 
 /* --- Screens --- */
@@ -88,7 +104,6 @@ body::before {
     align-items: center;
 }
 
-/* El game-screen necesita position: relative para las particulas de score */
 #game-screen {
     position: relative;
 }
@@ -102,26 +117,61 @@ body::before {
 .start-content {
     text-align: center;
     width: 100%;
+    padding: 40px 20px;
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 24px;
+    box-shadow:
+        0 0 80px rgba(255, 107, 53, 0.06),
+        0 0 120px rgba(165, 94, 234, 0.04),
+        0 20px 60px rgba(0, 0, 0, 0.3);
 }
 
 .game-title {
-    font-size: 5rem;
+    font-size: 6rem;
     font-weight: 900;
-    letter-spacing: -4px;
-    background: linear-gradient(135deg, var(--accent), var(--gem-purple));
+    letter-spacing: -6px;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--gem-yellow) 50%, var(--gem-purple) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 4px;
+    margin-bottom: 0;
     line-height: 1;
+    filter: drop-shadow(0 4px 20px rgba(255, 107, 53, 0.3));
 }
 
 .game-subtitle {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    letter-spacing: 4px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    letter-spacing: 6px;
     text-transform: uppercase;
     margin-bottom: 48px;
+    margin-top: 8px;
+}
+
+.start-decorations {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 36px;
+}
+
+.start-decorations .deco-gem {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    opacity: 0.5;
+    animation: decoFloat 3s ease-in-out infinite;
+}
+.start-decorations .deco-gem:nth-child(1) { background: var(--gem-red); animation-delay: 0s; }
+.start-decorations .deco-gem:nth-child(2) { background: var(--gem-blue); animation-delay: 0.3s; border-radius: 3px; }
+.start-decorations .deco-gem:nth-child(3) { background: var(--gem-green); animation-delay: 0.6s; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); }
+.start-decorations .deco-gem:nth-child(4) { background: var(--gem-yellow); animation-delay: 0.9s; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%); }
+.start-decorations .deco-gem:nth-child(5) { background: var(--gem-purple); animation-delay: 1.2s; clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%); }
+
+@keyframes decoFloat {
+    0%, 100% { transform: translateY(0); opacity: 0.4; }
+    50% { transform: translateY(-6px); opacity: 0.8; }
 }
 
 .start-menu {
@@ -129,7 +179,7 @@ body::before {
     flex-direction: column;
     gap: 12px;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 36px;
 }
 
 /* --- Botones --- */
@@ -163,14 +213,15 @@ body::before {
 }
 
 .btn-secondary {
-    background: var(--bg-card);
+    background: rgba(255, 255, 255, 0.05);
     color: var(--text-primary);
-    border: 2px solid var(--text-muted);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-secondary:hover {
     border-color: var(--accent);
     color: var(--accent);
+    background: rgba(255, 107, 53, 0.08);
 }
 
 /* --- High Score --- */
@@ -179,7 +230,9 @@ body::before {
     justify-content: center;
     gap: 8px;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 #high-score-value {
@@ -187,16 +240,46 @@ body::before {
     font-weight: 700;
 }
 
+/* --- Game Title Bar --- */
+.game-title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.game-title-bar .logo {
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, var(--accent), var(--gem-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.game-title-bar .level-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 /* --- Header del Juego --- */
 .game-header {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
+    gap: 6px;
     width: 100%;
-    margin-bottom: 12px;
-    padding: 12px 8px;
+    margin-bottom: 10px;
+    padding: 10px 8px;
     background: var(--bg-card);
-    border-radius: 16px;
+    border-radius: 14px;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -208,7 +291,7 @@ body::before {
 }
 
 .header-label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -218,23 +301,35 @@ body::before {
     font-size: 1.3rem;
     font-weight: 800;
     color: var(--text-primary);
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.header-value.bump {
+    transform: scale(1.2);
 }
 
 /* --- Barra de Progreso --- */
 .progress-container {
     width: 100%;
-    height: 6px;
-    background: var(--bg-card);
+    height: 5px;
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 3px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     overflow: hidden;
 }
 
 .progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--gem-purple));
+    background: linear-gradient(90deg, var(--accent), var(--gem-purple), var(--gem-blue));
+    background-size: 200% 100%;
     border-radius: 3px;
     transition: width 0.5s ease;
+    animation: progressShine 3s linear infinite;
+}
+
+@keyframes progressShine {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
 }
 
 /* --- Tablero de Juego --- */
@@ -246,12 +341,28 @@ body::before {
     padding: var(--board-padding);
     background: var(--bg-board);
     border-radius: 16px;
-    border: 2px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(255, 107, 53, 0.04),
+        0 0 100px rgba(165, 94, 234, 0.03),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
     position: relative;
     user-select: none;
     -webkit-user-select: none;
+}
+
+/* --- Celdas de fondo del tablero --- */
+.game-board::before {
+    content: '';
+    position: absolute;
+    inset: var(--board-padding);
+    border-radius: 8px;
+    background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: calc(var(--cell-size) + var(--gap)) calc(var(--cell-size) + var(--gap));
+    pointer-events: none;
 }
 
 /* --- Gems --- */
@@ -290,57 +401,57 @@ body::before {
 }
 
 /* Circulo (Rojo) */
-.gem.type-0 { background: radial-gradient(circle at 35% 35%, var(--gem-red-light), var(--gem-red)); box-shadow: 0 3px 12px rgba(255, 71, 87, 0.4); }
+.gem.type-0 { background: radial-gradient(circle at 35% 35%, var(--gem-red-light), var(--gem-red)); box-shadow: 0 3px 12px rgba(255, 71, 87, 0.4), inset 0 1px 1px rgba(255,255,255,0.2); }
 .gem.type-0 .gem-inner {
-    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.3), transparent);
+    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.35), transparent);
     width: 24px;
     height: 24px;
     border-radius: 50%;
 }
 
 /* Diamante (Azul) */
-.gem.type-1 { background: radial-gradient(circle at 35% 35%, var(--gem-blue-light), var(--gem-blue)); box-shadow: 0 3px 12px rgba(55, 66, 250, 0.4); }
+.gem.type-1 { background: radial-gradient(circle at 35% 35%, var(--gem-blue-light), var(--gem-blue)); box-shadow: 0 3px 12px rgba(55, 66, 250, 0.4), inset 0 1px 1px rgba(255,255,255,0.2); }
 .gem.type-1 .gem-inner {
     width: 28px;
     height: 28px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(135deg, rgba(255,255,255,0.45), transparent 60%);
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
 }
 
 /* Cuadrado rotado (Verde) */
-.gem.type-2 { background: radial-gradient(circle at 35% 35%, var(--gem-green-light), var(--gem-green)); box-shadow: 0 3px 12px rgba(46, 213, 115, 0.4); }
+.gem.type-2 { background: radial-gradient(circle at 35% 35%, var(--gem-green-light), var(--gem-green)); box-shadow: 0 3px 12px rgba(46, 213, 115, 0.4), inset 0 1px 1px rgba(255,255,255,0.2); }
 .gem.type-2 .gem-inner {
     width: 24px;
     height: 24px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent 60%);
     transform: rotate(45deg);
     border-radius: 4px;
 }
 
 /* Estrella (Amarillo) */
-.gem.type-3 { background: radial-gradient(circle at 35% 35%, var(--gem-yellow-light), var(--gem-yellow)); box-shadow: 0 3px 12px rgba(255, 165, 2, 0.4); }
+.gem.type-3 { background: radial-gradient(circle at 35% 35%, var(--gem-yellow-light), var(--gem-yellow)); box-shadow: 0 3px 12px rgba(255, 165, 2, 0.4), inset 0 1px 1px rgba(255,255,255,0.2); }
 .gem.type-3 .gem-inner {
     width: 30px;
     height: 30px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
+    background: linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.1));
     clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
 }
 
 /* Triangulo (Violeta) */
-.gem.type-4 { background: radial-gradient(circle at 35% 35%, var(--gem-purple-light), var(--gem-purple)); box-shadow: 0 3px 12px rgba(165, 94, 234, 0.4); }
+.gem.type-4 { background: radial-gradient(circle at 35% 35%, var(--gem-purple-light), var(--gem-purple)); box-shadow: 0 3px 12px rgba(165, 94, 234, 0.4), inset 0 1px 1px rgba(255,255,255,0.2); }
 .gem.type-4 .gem-inner {
     width: 28px;
     height: 28px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(180deg, rgba(255,255,255,0.45), transparent 60%);
     clip-path: polygon(50% 10%, 90% 90%, 10% 90%);
 }
 
 /* Hexagono (Naranja) */
-.gem.type-5 { background: radial-gradient(circle at 35% 35%, var(--gem-orange-light), var(--gem-orange)); box-shadow: 0 3px 12px rgba(255, 99, 72, 0.4); }
+.gem.type-5 { background: radial-gradient(circle at 35% 35%, var(--gem-orange-light), var(--gem-orange)); box-shadow: 0 3px 12px rgba(255, 99, 72, 0.4), inset 0 1px 1px rgba(255,255,255,0.2); }
 .gem.type-5 .gem-inner {
     width: 30px;
     height: 30px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.4), transparent);
+    background: linear-gradient(135deg, rgba(255,255,255,0.45), transparent 60%);
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
 }
 
@@ -363,19 +474,19 @@ body::before {
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1.12); box-shadow: 0 0 0 0 var(--accent-glow); }
-    50% { transform: scale(1.06); box-shadow: 0 0 20px 8px var(--accent-glow); }
+    0%, 100% { transform: scale(1.12); box-shadow: 0 0 0 0 var(--accent-glow), 0 3px 12px rgba(255, 71, 87, 0.4); }
+    50% { transform: scale(1.06); box-shadow: 0 0 20px 8px var(--accent-glow), 0 3px 12px rgba(255, 71, 87, 0.4); }
 }
 
 @keyframes hintPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    0%, 100% { transform: scale(1); filter: brightness(1); }
+    50% { transform: scale(1.1); filter: brightness(1.3); }
 }
 
 @keyframes matchPop {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.7; }
-    100% { transform: scale(0); opacity: 0; }
+    0% { transform: scale(1); opacity: 1; filter: brightness(1); }
+    30% { transform: scale(1.25); opacity: 1; filter: brightness(1.5); }
+    100% { transform: scale(0); opacity: 0; filter: brightness(2); }
 }
 
 @keyframes invalidShake {
@@ -399,36 +510,60 @@ body::before {
 /* --- Combo Message --- */
 .combo-message {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 900;
     color: var(--gem-yellow);
-    text-shadow: 0 0 20px rgba(255, 165, 2, 0.6);
+    text-shadow:
+        0 0 20px rgba(255, 165, 2, 0.6),
+        0 0 40px rgba(255, 165, 2, 0.3);
     pointer-events: none;
     opacity: 0;
     z-index: 100;
     white-space: nowrap;
+    letter-spacing: 1px;
+}
+
+.combo-message.big-combo {
+    font-size: 2.6rem;
+    color: var(--gem-red-light);
+    text-shadow:
+        0 0 30px rgba(255, 71, 87, 0.7),
+        0 0 60px rgba(255, 71, 87, 0.4),
+        0 0 90px rgba(255, 71, 87, 0.2);
 }
 
 .combo-message.show {
-    animation: comboShow 0.8s ease-out forwards;
+    animation: comboShow 0.9s ease-out forwards;
+}
+
+.combo-message.big-combo.show {
+    animation: bigComboShow 1.1s ease-out forwards;
 }
 
 @keyframes comboShow {
     0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
-    30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
-    70% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-    100% { opacity: 0; transform: translate(-50%, -60%) scale(0.9); }
+    25% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+    60% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -65%) scale(0.9); }
+}
+
+@keyframes bigComboShow {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+    15% { opacity: 1; transform: translate(-50%, -50%) scale(1.4); }
+    30% { transform: translate(-50%, -50%) scale(1); }
+    60% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -70%) scale(1.1); }
 }
 
 /* --- Overlays --- */
 .overlay {
     position: fixed;
     inset: 0;
-    background: rgba(15, 14, 23, 0.85);
-    backdrop-filter: blur(8px);
+    background: rgba(10, 10, 20, 0.88);
+    backdrop-filter: blur(12px);
     display: none;
     justify-content: center;
     align-items: center;
@@ -442,17 +577,19 @@ body::before {
 
 .overlay-content {
     background: var(--bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 24px;
-    padding: 40px;
+    padding: 44px 40px;
     text-align: center;
     max-width: 360px;
     width: 90%;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 80px rgba(255, 107, 53, 0.05);
 }
 
 .overlay-content h2 {
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     margin-bottom: 24px;
     background: linear-gradient(135deg, var(--accent), var(--gem-purple));
     -webkit-background-clip: text;
@@ -480,6 +617,16 @@ body::before {
     display: block;
 }
 
+/* --- Footer --- */
+.game-footer {
+    margin-top: 16px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    opacity: 0.5;
+}
+
 /* --- Responsive --- */
 @media (max-width: 520px) {
     :root {
@@ -493,7 +640,15 @@ body::before {
     }
 
     .game-title {
-        font-size: 4rem;
+        font-size: 4.5rem;
+    }
+
+    .start-content {
+        padding: 30px 16px;
+    }
+
+    .game-title-bar .logo {
+        font-size: 1.3rem;
     }
 
     .game-header {
@@ -515,6 +670,9 @@ body::before {
     .gem.type-3 .gem-inner { width: 24px !important; height: 24px !important; }
     .gem.type-4 .gem-inner { width: 22px !important; height: 22px !important; }
     .gem.type-5 .gem-inner { width: 24px !important; height: 24px !important; }
+
+    .combo-message { font-size: 1.4rem; }
+    .combo-message.big-combo { font-size: 2rem; }
 }
 
 @media (max-width: 380px) {
@@ -523,9 +681,11 @@ body::before {
         --gap: 2px;
     }
 
-    .game-title { font-size: 3.5rem; }
+    .game-title { font-size: 3.5rem; letter-spacing: -4px; }
     .header-value { font-size: 1rem; }
     .header-label { font-size: 0.55rem; }
+    .combo-message { font-size: 1.2rem; }
+    .combo-message.big-combo { font-size: 1.6rem; }
 }
 
 /* --- Particulas de puntuacion --- */

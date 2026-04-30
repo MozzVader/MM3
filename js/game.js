@@ -28,8 +28,13 @@
         { target: 13000, moves: 15, types: 6 },
     ];
 
-    // Nombres de combos
+    // Nombres de combos por cascade
     const COMBO_NAMES = ['', '', '', 'Triple!', 'Combo x4!', 'MEGA x5!', 'ULTRA x6!'];
+
+    // Nombres de matches por longitud
+    const MATCH_LENGTH_NAMES = {
+        3: '', 4: 'Match x4!', 5: 'Match x5!', 6: 'Match x6!', 7: 'INSANO!'
+    };
 
     // --- Estado del juego ---
     let board = [];           // board[row][col] = tipo de gem (0 a GEM_TYPES-1) o null
@@ -454,13 +459,18 @@
         while (matches.length > 0) {
             cascadeCount++;
 
+            // Detectar la linea mas larga en este batch de matches
+            const maxLineLength = getMaxMatchLineLength(matches);
+
             // Calcular puntos
             const points = calculateScore(matches, cascadeCount);
             score += points;
             updateUI();
 
-            // Mostrar combo si aplica
-            if (cascadeCount >= 2) {
+            // Mostrar feedback: priorizar match largo > combo de cascade
+            if (maxLineLength >= 4) {
+                showMatchLengthFeedback(maxLineLength, points);
+            } else if (cascadeCount >= 2) {
                 showCombo(cascadeCount, points);
             }
 
@@ -713,9 +723,17 @@
 
     function updateUI() {
         $('#current-level').textContent = level;
-        $('#current-score').textContent = score;
+        const scoreEl = $('#current-score');
+        const prevScore = parseInt(scoreEl.textContent) || 0;
+        scoreEl.textContent = score;
+        // Animar bump cuando cambia el score
+        if (score !== prevScore) {
+            scoreEl.classList.add('bump');
+            setTimeout(() => scoreEl.classList.remove('bump'), 200);
+        }
         $('#target-score').textContent = targetScore;
         $('#moves-left').textContent = movesLeft;
+        $('#level-badge-num').textContent = level;
 
         // Barra de progreso
         const progress = Math.min(100, (score / targetScore) * 100);
@@ -732,18 +750,64 @@
         }
     }
 
-    function showCombo(cascade, points) {
-        const name = COMBO_NAMES[Math.min(cascade, COMBO_NAMES.length - 1)] || `Combo x${cascade}!`;
-        showComboText(`${name} +${points}`);
+    // Obtener la longitud de la linea mas larga en un conjunto de matches
+    function getMaxMatchLineLength(matches) {
+        let maxLen = 0;
+        const rows = {};
+        const cols = {};
+        for (const m of matches) {
+            if (!rows[m.row]) rows[m.row] = [];
+            rows[m.row].push(m.col);
+            if (!cols[m.col]) cols[m.col] = [];
+            cols[m.col].push(m.row);
+        }
+        for (const r in rows) {
+            const sorted = rows[r].sort((a, b) => a - b);
+            let consec = 1;
+            for (let i = 1; i < sorted.length; i++) {
+                if (sorted[i] === sorted[i - 1] + 1) {
+                    consec++;
+                } else {
+                    if (consec > maxLen) maxLen = consec;
+                    consec = 1;
+                }
+            }
+            if (consec > maxLen) maxLen = consec;
+        }
+        for (const c in cols) {
+            const sorted = cols[c].sort((a, b) => a - b);
+            let consec = 1;
+            for (let i = 1; i < sorted.length; i++) {
+                if (sorted[i] === sorted[i - 1] + 1) {
+                    consec++;
+                } else {
+                    if (consec > maxLen) maxLen = consec;
+                    consec = 1;
+                }
+            }
+            if (consec > maxLen) maxLen = consec;
+        }
+        return maxLen;
     }
 
-    function showComboText(text) {
+    function showMatchLengthFeedback(length, points) {
+        const name = MATCH_LENGTH_NAMES[length] || `Match x${length}!`;
+        showComboText(`${name} +${points}`, length >= 5 ? 'big' : 'normal');
+    }
+
+    function showCombo(cascade, points) {
+        const name = COMBO_NAMES[Math.min(cascade, COMBO_NAMES.length - 1)] || `Combo x${cascade}!`;
+        showComboText(`${name} +${points}`, 'normal');
+    }
+
+    function showComboText(text, size) {
         comboMessage.textContent = text;
-        comboMessage.classList.remove('show');
+        comboMessage.classList.remove('show', 'big-combo');
+        if (size === 'big') comboMessage.classList.add('big-combo');
         // Forzar reflow
         void comboMessage.offsetWidth;
         comboMessage.classList.add('show');
-        setTimeout(() => comboMessage.classList.remove('show'), 900);
+        setTimeout(() => comboMessage.classList.remove('show', 'big-combo'), 1000);
     }
 
     function showScoreParticles(matches, points) {
