@@ -120,12 +120,12 @@
     // --- Auth Actions ---
 
     async function signUp(email, password, username) {
-        if (!supabase) {
+        if (!sb) {
             showAuthError('register', 'Error de conexion. Intenta de nuevo.');
             return;
         }
 
-        const { data, error } = await supabase.auth.signUp({
+        const { data, error } = await sb.auth.signUp({
             email,
             password,
             options: {
@@ -150,12 +150,12 @@
     }
 
     async function signIn(email, password) {
-        if (!supabase) {
+        if (!sb) {
             showAuthError('login', 'Error de conexion. Intenta de nuevo.');
             return;
         }
 
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await sb.auth.signInWithPassword({
             email,
             password
         });
@@ -170,8 +170,8 @@
     }
 
     async function signOut() {
-        if (!supabase) return;
-        await supabase.auth.signOut();
+        if (!sb) return;
+        await sb.auth.signOut();
         showLoggedOutUI();
     }
 
