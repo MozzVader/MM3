@@ -103,6 +103,29 @@
         }
     }
 
+    // --- Guardar score a Supabase ---
+    async function saveScoreToSupabase(reason) {
+        try {
+            if (typeof sb === 'undefined' || !sb) return;
+            const { data: { session } } = await sb.auth.getSession();
+            if (!session?.user) return; // not logged in, skip silently
+
+            await sb.from('game_scores').insert({
+                user_id: session.user.id,
+                game_slug: 'match3',
+                score: score,
+                level: level,
+                metadata: {
+                    reason: reason, // 'level_complete' or 'game_over'
+                    moves_left: movesLeft,
+                },
+            });
+            console.log('[match3] Score saved to Supabase (reason: ' + reason + ', score: ' + score + ')');
+        } catch (e) {
+            console.warn('[match3] Error saving score:', e);
+        }
+    }
+
     function checkContinueButton() {
         const saved = localStorage.getItem('mm3_save');
         const btn = $('#btn-continue');
@@ -752,6 +775,7 @@
         // Verificar si alcanzo el objetivo
         if (score >= targetScore) {
             saveHighScore();
+            saveScoreToSupabase('level_complete');
             setTimeout(() => {
                 $('#level-score').textContent = score;
                 $('#level-moves').textContent = movesLeft;
@@ -763,6 +787,7 @@
         // Verificar si se quedo sin movimientos
         if (movesLeft <= 0) {
             saveHighScore();
+            saveScoreToSupabase('game_over');
             setTimeout(() => {
                 $('#final-score').textContent = score;
                 $('#final-level').textContent = level;

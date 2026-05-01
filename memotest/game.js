@@ -724,6 +724,34 @@
     }
 
     // ═══════════════════════════════════════════
+    // SAVE SCORE TO SUPABASE
+    // ═══════════════════════════════════════════
+    async function saveScoreToSupabase(score) {
+        try {
+            if (typeof sb === 'undefined' || !sb) return;
+            const { data: { session } } = await sb.auth.getSession();
+            if (!session?.user) return; // not logged in, skip silently
+
+            await sb.from('game_scores').insert({
+                user_id: session.user.id,
+                game_slug: 'memotest',
+                score: score,
+                level: currentDifficulty,
+                metadata: {
+                    time: seconds,
+                    moves: moves,
+                    pairs: totalPairs,
+                    stars: calculateStars(),
+                    pack: activePackId,
+                },
+            });
+            console.log('[memotest] Score saved to Supabase');
+        } catch (e) {
+            console.warn('[memotest] Error saving score:', e);
+        }
+    }
+
+    // ═══════════════════════════════════════════
     // NAVIGATION
     // ═══════════════════════════════════════════
     function showScreen(screen) {
@@ -946,6 +974,7 @@
         const score = calculateScore();
         const stars = calculateStars();
         saveHighScore(score);
+        saveScoreToSupabase(score); // Save to Supabase (async, non-blocking)
 
         setTimeout(() => {
             $('#final-moves').textContent = moves;
