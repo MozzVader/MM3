@@ -110,7 +110,7 @@
             const { data: { session } } = await sb.auth.getSession();
             if (!session?.user) return; // not logged in, skip silently
 
-            await sb.from('game_scores').insert({
+            const { error } = await sb.from('game_scores').insert({
                 user_id: session.user.id,
                 game_slug: 'match3',
                 score: score,
@@ -120,7 +120,12 @@
                     moves_left: movesLeft,
                 },
             });
-            console.log('[match3] Score saved to Supabase (reason: ' + reason + ', score: ' + score + ')');
+
+            if (error) {
+                console.warn('[match3] Supabase error:', error.message);
+            } else {
+                console.log('[match3] Score saved to Supabase (reason: ' + reason + ', score: ' + score + ')');
+            }
         } catch (e) {
             console.warn('[match3] Error saving score:', e);
         }

@@ -732,12 +732,13 @@
             const { data: { session } } = await sb.auth.getSession();
             if (!session?.user) return; // not logged in, skip silently
 
-            await sb.from('game_scores').insert({
+            const { error } = await sb.from('game_scores').insert({
                 user_id: session.user.id,
                 game_slug: 'memotest',
                 score: score,
-                level: currentDifficulty,
+                level: null, // difficulty is a string, stored in metadata
                 metadata: {
+                    difficulty: currentDifficulty,
                     time: seconds,
                     moves: moves,
                     pairs: totalPairs,
@@ -745,7 +746,12 @@
                     pack: activePackId,
                 },
             });
-            console.log('[memotest] Score saved to Supabase');
+
+            if (error) {
+                console.warn('[memotest] Supabase error:', error.message);
+            } else {
+                console.log('[memotest] Score saved to Supabase');
+            }
         } catch (e) {
             console.warn('[memotest] Error saving score:', e);
         }
