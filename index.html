@@ -25,6 +25,10 @@
                         <span id="username-display" class="username-text">Usuario</span>
                     </button>
                     <div id="user-dropdown" class="user-dropdown glass-sm">
+                        <button id="stats-btn" class="dropdown-item dropdown-item-stats">
+                            <i class="fa-solid fa-chart-simple"></i> Estadisticas
+                        </button>
+                        <div class="dropdown-divider"></div>
                         <button id="logout-btn" class="dropdown-item">
                             Cerrar Sesion
                         </button>
@@ -99,6 +103,43 @@
         </div>
     </div>
 
+    <!-- Stats Modal -->
+    <div id="stats-modal" class="overlay glass-dark">
+        <div class="stats-modal glass">
+            <button id="stats-close" class="auth-close">&times;</button>
+            <div class="stats-greeting">
+                <span class="stats-hello">Hola,</span>
+                <span id="stats-username" class="stats-name">Jugador</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon stat-icon-games">&#x1F3AE;</div>
+                    <div class="stat-value" data-stat="totalGames">--</div>
+                    <div class="stat-label">Partidas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon stat-icon-score">&#x2B50;</div>
+                    <div class="stat-value" data-stat="totalScore">--</div>
+                    <div class="stat-label">Puntos Totales</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon stat-icon-match3">&#x1F48E;</div>
+                    <div class="stat-value" data-stat="bestMatch3">--</div>
+                    <div class="stat-label">Mejor Match 3</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon stat-icon-memotest">&#x1F0CF;</div>
+                    <div class="stat-value" data-stat="bestMemotest">--</div>
+                    <div class="stat-label">Mejor Memotest</div>
+                </div>
+            </div>
+            <div id="best-moments" class="best-moments" style="display: none;">
+                <div class="moments-title">Tus Mejores Momentos</div>
+                <div id="moments-list" class="moments-list"></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Hero Section -->
     <header class="hero">
         <div class="hero-content">
@@ -119,59 +160,12 @@
         </div>
     </header>
 
-    <!-- Guest CTA (shown when NOT logged in) -->
-    <section id="guest-cta-section" class="guest-cta-section" style="display: none;">
-        <div class="guest-cta glass">
-            <div class="guest-cta-icon">&#x1F3B5;</div>
-            <div class="guest-cta-text">
-                <strong>Inicia sesion para ver tus estadisticas</strong>
-                <span>Lleva el registro de tus partidas, compite en rankings y desbloquea logros.</span>
-            </div>
-            <button id="guest-login-btn" class="btn btn-secondary guest-cta-btn">Ingresar</button>
-        </div>
-    </section>
-
     <!-- Games Section -->
     <main id="games" class="games-section">
         <div class="section-header">
             <h2 class="section-title">Juegos Disponibles</h2>
             <p class="section-subtitle">Elegi tu favorito y empezá a jugar</p>
         </div>
-
-        <!-- User Stats Aside (only shown when logged in) -->
-        <aside id="user-stats-section" class="stats-aside glass" style="display: none;">
-            <div class="stats-greeting">
-                <span class="stats-hello">Hola,</span>
-                <span id="stats-username" class="stats-name">Jugador</span>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-icon stat-icon-games">&#x1F3AE;</div>
-                    <div class="stat-value" data-stat="totalGames">0</div>
-                    <div class="stat-label">Partidas</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon stat-icon-score">&#x2B50;</div>
-                    <div class="stat-value" data-stat="totalScore">0</div>
-                    <div class="stat-label">Puntos Totales</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon stat-icon-match3">&#x1F48E;</div>
-                    <div class="stat-value" data-stat="bestMatch3">0</div>
-                    <div class="stat-label">Mejor Match 3</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-icon stat-icon-memotest">&#x1F0CF;</div>
-                    <div class="stat-value" data-stat="bestMemotest">--</div>
-                    <div class="stat-label">Mejor Memotest</div>
-                </div>
-            </div>
-            <!-- Best Moments -->
-            <div id="best-moments" class="best-moments" style="display: none;">
-                <div class="moments-title">Tus Mejores Momentos</div>
-                <div id="moments-list" class="moments-list"></div>
-            </div>
-        </aside>
 
         <div class="games-grid">
             <!-- Match 3 Card -->

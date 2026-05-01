@@ -553,38 +553,12 @@
     }
 
     /**
-     * Show the user-stats-section because the user IS logged in.
-     * Always shows the section with username — even if stats fail to load.
+     * User is logged in — hide guest CTA.
+     * Stats are loaded lazily when the user opens the modal.
      */
     function showLoggedInUI(session) {
-        const statsSection = $('#user-stats-section');
         const guestSection = $('#guest-cta-section');
-
-        // NEVER show guest CTA when user is logged in
         if (guestSection) guestSection.style.display = 'none';
-
-        // Always show stats section
-        if (statsSection) statsSection.style.display = 'block';
-
-        // Show username immediately from session
-        const nameEl = $('#stats-username');
-        if (nameEl) {
-            nameEl.textContent = getNameFromSession(session);
-        }
-
-        // Reset stat values to defaults while loading
-        const totalGamesEl = document.querySelector('[data-stat="totalGames"]');
-        const totalScoreEl = document.querySelector('[data-stat="totalScore"]');
-        const bestMatch3El = document.querySelector('[data-stat="bestMatch3"]');
-        const bestMemotestEl = document.querySelector('[data-stat="bestMemotest"]');
-        if (totalGamesEl) totalGamesEl.textContent = '...';
-        if (totalScoreEl) totalScoreEl.textContent = '...';
-        if (bestMatch3El) bestMatch3El.textContent = '...';
-        if (bestMemotestEl) bestMemotestEl.textContent = '...';
-
-        // Hide best moments while loading
-        const momentsSection = $('#best-moments');
-        if (momentsSection) momentsSection.style.display = 'none';
     }
 
     /** Populate the stats cards after data loads */
@@ -657,23 +631,47 @@
     }
 
     function showGuestCTA() {
-        const statsSection = $('#user-stats-section');
+        // No more inline guest CTA — the navbar handles auth state.
+        // Just hide any leftover sections.
         const guestSection = $('#guest-cta-section');
-        if (statsSection) statsSection.style.display = 'none';
-        if (guestSection) {
-            guestSection.style.display = 'block';
-            const btn = $('#guest-login-btn');
-            if (btn) btn.style.display = '';
-            const text = guestSection.querySelector('.guest-cta-text');
-            if (text) {
-                text.innerHTML = `
-                    <strong>Inicia sesion para ver tus estadisticas</strong>
-                    <span>Lleva el registro de tus partidas, compite en rankings y desbloquea logros.</span>
-                `;
-            }
-            const icon = guestSection.querySelector('.guest-cta-icon');
-            if (icon) icon.innerHTML = '&#x1F3B5;';
+        if (guestSection) guestSection.style.display = 'none';
+    }
+
+    // =============================================
+    // STATS MODAL
+    // =============================================
+
+    async function openStatsModal() {
+        const modal = $('#stats-modal');
+        if (!modal) return;
+
+        // Set username from session
+        const nameEl = $('#stats-username');
+        const { data: { session } } = await sb.auth.getSession();
+        if (nameEl && session) {
+            nameEl.textContent = getNameFromSession(session);
         }
+
+        // Reset stat values to loading state
+        document.querySelectorAll('.stats-modal [data-stat]').forEach(el => {
+            el.textContent = '...';
+        });
+        const momentsSection = $('#best-moments');
+        if (momentsSection) momentsSection.style.display = 'none';
+
+        // Show modal
+        modal.classList.add('active');
+
+        // Load stats (with cache, so repeated opens are instant)
+        if (session) {
+            const stats = await Stats.load(session.user.id);
+            populateStats(stats);
+        }
+    }
+
+    function closeStatsModal() {
+        const modal = $('#stats-modal');
+        if (modal) modal.classList.remove('active');
     }
 
     // =============================================
@@ -746,12 +744,27 @@
 
         $$('.game-card').forEach(card => observer.observe(card));
 
-        // Guest CTA login button
-        const guestLoginBtn = $('#guest-login-btn');
-        if (guestLoginBtn) {
-            guestLoginBtn.addEventListener('click', () => {
-                const authBtn = $('#auth-btn');
-                if (authBtn) authBtn.click();
+        // Stats modal: open from dropdown button
+        const statsBtn = $('#stats-btn');
+        if (statsBtn) {
+            statsBtn.addEventListener('click', () => {
+                openStatsModal();
+                const dropdown = $('#user-dropdown');
+                if (dropdown) dropdown.classList.remove('active');
+            });
+        }
+
+        // Stats modal: close button
+        const statsClose = $('#stats-close');
+        if (statsClose) {
+            statsClose.addEventListener('click', closeStatsModal);
+        }
+
+        // Stats modal: close on overlay click
+        const statsModal = $('#stats-modal');
+        if (statsModal) {
+            statsModal.addEventListener('click', (e) => {
+                if (e.target === statsModal) closeStatsModal();
             });
         }
 
@@ -800,32 +813,12 @@
         console.log('[home] handleAuthSession called, session:', !!session);
 
         if (!session || !session.user) {
-            // NOT logged in → show guest CTA
             showGuestCTA();
             return;
         }
 
-        // LOGGED IN → immediately show stats section with username
+        // Logged in — just update UI state (no inline stats anymore)
         showLoggedInUI(session);
-
-        // Then try to load stats from Supabase
-        try {
-            const stats = await Stats.load(session.user.id);
-            console.log('[home] Stats loaded:', stats ? `totalGames=${stats.totalGames}` : 'null');
-            populateStats(stats);
-        } catch (e) {
-            console.warn('[home] Stats load error:', e);
-            // Stats section is already visible with username and "..." values
-            // Just show dashes instead of loading indicators
-            const totalGamesEl = document.querySelector('[data-stat="totalGames"]');
-            const totalScoreEl = document.querySelector('[data-stat="totalScore"]');
-            const bestMatch3El = document.querySelector('[data-stat="bestMatch3"]');
-            const bestMemotestEl = document.querySelector('[data-stat="bestMemotest"]');
-            if (totalGamesEl) totalGamesEl.textContent = '--';
-            if (totalScoreEl) totalScoreEl.textContent = '--';
-            if (bestMatch3El) bestMatch3El.textContent = '--';
-            if (bestMemotestEl) bestMemotestEl.textContent = '--';
-        }
     }
 
     // Start
