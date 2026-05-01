@@ -140,6 +140,213 @@
     100% { transform: translate(0, 0) rotate(360deg); opacity: 0.2; }
 }
 
+/* --- User Stats Section --- */
+.stats-section {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+    margin: -20px auto 0;
+    padding: 0 20px 30px;
+}
+
+.stats-card {
+    padding: 28px 32px;
+    animation: slideInUp 0.5s ease-out;
+}
+
+.stats-greeting {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.stats-hello {
+    font-size: 1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.stats-name {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-left: 6px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 12px 8px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+    line-height: 1;
+}
+
+.stat-value {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-label {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+/* --- Best Moments --- */
+.best-moments {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.moments-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+.moments-list {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+.moments-list::-webkit-scrollbar {
+    height: 4px;
+}
+
+.moments-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.moments-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.moment-card {
+    flex-shrink: 0;
+    min-width: 160px;
+    padding: 14px 16px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.moment-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.moment-game {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--accent);
+    margin-bottom: 6px;
+}
+
+.moment-score {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.moment-meta {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.moment-empty {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+/* --- Guest CTA Section --- */
+.guest-cta-section {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: -20px auto 0;
+    padding: 0 20px 30px;
+}
+
+.guest-cta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    animation: slideInUp 0.5s ease-out;
+}
+
+.guest-cta-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.guest-cta-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.guest-cta-text strong {
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.guest-cta-text span {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.guest-cta-btn {
+    flex-shrink: 0;
+    min-width: unset !important;
+    padding: 10px 24px !important;
+    font-size: 0.85rem !important;
+}
+
 /* --- Games Section --- */
 .games-section {
     position: relative;
@@ -206,18 +413,49 @@
     transform: translateX(4px);
 }
 
-.game-card:not(.card-coming-soon):hover .card-preview .preview-gem,
-.game-card:not(.card-coming-soon):hover .card-preview .preview-card {
-    animation-play-state: running;
+/* --- Animated Gradient Border Glow --- */
+.card-glow-border {
+    position: absolute;
+    inset: -1px;
+    border-radius: 24px;
+    background: conic-gradient(
+        from var(--glow-angle, 0deg),
+        transparent 0%,
+        var(--accent) 10%,
+        var(--gem-purple) 20%,
+        var(--gem-blue) 30%,
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: -1;
+    filter: blur(3px);
+}
+
+.game-card:not(.card-coming-soon):hover .card-glow-border {
+    opacity: 0.6;
+    animation: glowRotate 3s linear infinite;
+}
+
+@keyframes glowRotate {
+    0% { --glow-angle: 0deg; }
+    100% { --glow-angle: 360deg; }
+}
+
+/* Fallback for browsers without @property */
+@supports not (background: conic-gradient(from 0deg, red, blue)) {
+    .card-glow-border {
+        background: none;
+        box-shadow: inset 0 0 30px rgba(255, 107, 53, 0.15);
+    }
 }
 
 /* --- Card Preview --- */
 .card-preview {
-    height: 120px;
+    height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
     margin-bottom: 20px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.02);
@@ -225,132 +463,82 @@
     position: relative;
 }
 
-/* Match 3 Preview Gems */
-.preview-gem {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    animation: previewFloat 3s ease-in-out infinite;
-    animation-play-state: paused;
+/* --- Mini Match 3 Canvas --- */
+.mini-canvas {
+    width: 140px;
+    height: 140px;
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
 }
 
-.gem-preview-1 {
-    background: radial-gradient(circle at 35% 35%, var(--gem-red-light), var(--gem-red));
-    box-shadow: 0 3px 12px rgba(255, 71, 87, 0.4);
-    animation-delay: 0s;
-}
-.gem-preview-2 {
-    background: radial-gradient(circle at 35% 35%, var(--gem-blue-light), var(--gem-blue));
-    box-shadow: 0 3px 12px rgba(55, 66, 250, 0.4);
-    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-    animation-delay: 0.3s;
-}
-.gem-preview-3 {
-    background: radial-gradient(circle at 35% 35%, var(--gem-green-light), var(--gem-green));
-    box-shadow: 0 3px 12px rgba(46, 213, 115, 0.4);
-    animation-delay: 0.6s;
-}
-.gem-preview-4 {
-    background: radial-gradient(circle at 35% 35%, var(--gem-yellow-light), var(--gem-yellow));
-    box-shadow: 0 3px 12px rgba(255, 165, 2, 0.4);
-    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-    animation-delay: 0.9s;
-}
-.gem-preview-5 {
-    background: radial-gradient(circle at 35% 35%, var(--gem-purple-light), var(--gem-purple));
-    box-shadow: 0 3px 12px rgba(165, 94, 234, 0.4);
-    clip-path: polygon(50% 10%, 90% 90%, 10% 90%);
-    animation-delay: 1.2s;
-}
-.gem-preview-6 {
-    background: radial-gradient(circle at 35% 35%, var(--gem-orange-light), var(--gem-orange));
-    box-shadow: 0 3px 12px rgba(255, 99, 72, 0.4);
-    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-    animation-delay: 1.5s;
+.game-card:hover .mini-canvas {
+    opacity: 1;
 }
 
-@keyframes previewFloat {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-8px) scale(1.05); }
+/* --- Mini Memotest Board --- */
+.mini-memotest-board {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    perspective: 800px;
 }
 
-/* Memotest Preview Cards */
-.preview-card {
-    width: 50px;
-    height: 70px;
-    border-radius: 8px;
-    border: 2px solid rgba(255, 255, 255, 0.1);
+.mini-memotest-card {
+    width: 52px;
+    height: 66px;
+    cursor: default;
+}
+
+.mini-mt-inner {
     position: relative;
-    animation: previewFloat 3s ease-in-out infinite;
-    animation-play-state: paused;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s ease;
+    transform-style: preserve-3d;
 }
 
-.memotest-card-1 {
-    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(255, 107, 53, 0.05));
-    border-color: rgba(255, 107, 53, 0.3);
-    animation-delay: 0s;
+.mini-memotest-card.flipped .mini-mt-inner {
+    transform: rotateY(180deg);
 }
-.memotest-card-1::after {
-    content: '?';
+
+.mini-mt-front,
+.mini-mt-back {
     position: absolute;
     inset: 0;
+    border-radius: 8px;
+    backface-visibility: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: rgba(255, 107, 53, 0.6);
 }
 
-.memotest-card-2 {
-    background: linear-gradient(135deg, rgba(165, 94, 234, 0.2), rgba(165, 94, 234, 0.05));
-    border-color: rgba(165, 94, 234, 0.3);
-    animation-delay: 0.4s;
-}
-.memotest-card-2::after {
-    content: '?';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: rgba(165, 94, 234, 0.6);
+.mini-mt-front {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2), rgba(165, 94, 234, 0.1));
+    border: 2px solid rgba(255, 107, 53, 0.25);
 }
 
-.memotest-card-3 {
-    background: linear-gradient(135deg, rgba(46, 213, 115, 0.2), rgba(46, 213, 115, 0.05));
-    border-color: rgba(46, 213, 115, 0.3);
-    animation-delay: 0.8s;
-}
-.memotest-card-3::after {
+.mini-mt-front::after {
     content: '?';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     font-size: 1.4rem;
     font-weight: 800;
-    color: rgba(46, 213, 115, 0.6);
+    color: rgba(255, 107, 53, 0.5);
 }
 
-.memotest-card-4 {
-    background: linear-gradient(135deg, rgba(255, 165, 2, 0.2), rgba(255, 165, 2, 0.05));
-    border-color: rgba(255, 165, 2, 0.3);
-    animation-delay: 1.2s;
+.mini-mt-back {
+    background: linear-gradient(135deg, rgba(46, 213, 115, 0.15), rgba(55, 66, 250, 0.1));
+    border: 2px solid rgba(46, 213, 115, 0.3);
+    transform: rotateY(180deg);
 }
-.memotest-card-4::after {
-    content: '?';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: rgba(255, 165, 2, 0.6);
+
+.mini-mt-back i {
+    font-size: 1.3rem;
+    color: var(--text-primary);
+}
+
+.mini-memotest-card.matched .mini-mt-back {
+    border-color: var(--gem-green);
+    background: rgba(46, 213, 115, 0.2);
+    box-shadow: 0 0 12px rgba(46, 213, 115, 0.3);
 }
 
 /* --- Card Info --- */
@@ -812,6 +1000,22 @@
     .section-title {
         font-size: 1.8rem;
     }
+
+    /* Stats grid: 2x2 on tablet */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat-value {
+        font-size: 1.4rem;
+    }
+
+    /* Guest CTA: stack */
+    .guest-cta {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
 }
 
 @media (max-width: 400px) {
@@ -833,17 +1037,40 @@
     }
 
     .card-preview {
-        height: 90px;
-        gap: 6px;
+        height: 110px;
     }
 
-    .preview-gem {
-        width: 28px;
-        height: 28px;
+    .stats-card {
+        padding: 20px 16px;
     }
 
-    .preview-card {
-        width: 40px;
+    .stats-grid {
+        gap: 10px;
+    }
+
+    .stat-item {
+        padding: 10px 6px;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .stat-label {
+        font-size: 0.65rem;
+    }
+
+    .mini-memotest-card {
+        width: 44px;
         height: 56px;
+    }
+
+    .mini-mt-back i {
+        font-size: 1.1rem;
+    }
+
+    .mini-canvas {
+        width: 110px;
+        height: 110px;
     }
 }

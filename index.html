@@ -119,6 +119,55 @@
         </div>
     </header>
 
+    <!-- User Stats Panel (only shown when logged in) -->
+    <section id="user-stats-section" class="stats-section" style="display: none;">
+        <div class="stats-card glass">
+            <div class="stats-greeting">
+                <span class="stats-hello">Hola,</span>
+                <span id="stats-username" class="stats-name">Jugador</span>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon stat-icon-games">&#x1F3AE;</div>
+                    <div class="stat-value" data-stat="totalGames">0</div>
+                    <div class="stat-label">Partidas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon stat-icon-score">&#x2B50;</div>
+                    <div class="stat-value" data-stat="totalScore">0</div>
+                    <div class="stat-label">Puntos Totales</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon stat-icon-match3">&#x1F48E;</div>
+                    <div class="stat-value" data-stat="bestMatch3">0</div>
+                    <div class="stat-label">Mejor Match 3</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon stat-icon-memotest">&#x1F0CF;</div>
+                    <div class="stat-value" data-stat="bestMemotest">--</div>
+                    <div class="stat-label">Mejor Memotest</div>
+                </div>
+            </div>
+            <!-- Best Moments -->
+            <div id="best-moments" class="best-moments" style="display: none;">
+                <div class="moments-title">Tus Mejores Momentos</div>
+                <div id="moments-list" class="moments-list"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Guest CTA (shown when NOT logged in) -->
+    <section id="guest-cta-section" class="guest-cta-section" style="display: none;">
+        <div class="guest-cta glass">
+            <div class="guest-cta-icon">&#x1F3B5;</div>
+            <div class="guest-cta-text">
+                <strong>Inicia sesion para ver tus estadisticas</strong>
+                <span>Lleva el registro de tus partidas, compite en rankings y desbloquea logros.</span>
+            </div>
+            <button id="guest-login-btn" class="btn btn-secondary guest-cta-btn">Ingresar</button>
+        </div>
+    </section>
+
     <!-- Games Section -->
     <main id="games" class="games-section">
         <div class="section-header">
@@ -128,14 +177,9 @@
 
         <div class="games-grid">
             <!-- Match 3 Card -->
-            <a href="match3/index.html" class="game-card glass">
+            <a href="match3/index.html" class="game-card glass" data-game="match3">
                 <div class="card-preview match3-preview">
-                    <div class="preview-gem gem-preview-1"></div>
-                    <div class="preview-gem gem-preview-2"></div>
-                    <div class="preview-gem gem-preview-3"></div>
-                    <div class="preview-gem gem-preview-4"></div>
-                    <div class="preview-gem gem-preview-5"></div>
-                    <div class="preview-gem gem-preview-6"></div>
+                    <canvas id="match3-canvas" class="mini-canvas"></canvas>
                 </div>
                 <div class="card-info">
                     <span class="card-badge">Puzzle</span>
@@ -151,15 +195,47 @@
                     <span>Jugar</span>
                     <span class="play-arrow">&rarr;</span>
                 </div>
+                <!-- Animated gradient border -->
+                <div class="card-glow-border"></div>
             </a>
 
             <!-- Memotest Card -->
-            <a href="memotest/index.html" class="game-card glass">
+            <a href="memotest/index.html" class="game-card glass" data-game="memotest">
                 <div class="card-preview memotest-preview">
-                    <div class="preview-card memotest-card-1"></div>
-                    <div class="preview-card memotest-card-2"></div>
-                    <div class="preview-card memotest-card-3"></div>
-                    <div class="preview-card memotest-card-4"></div>
+                    <div class="mini-memotest-board" id="mini-memotest-board">
+                        <div class="mini-memotest-card" data-pair="0">
+                            <div class="mini-mt-inner">
+                                <div class="mini-mt-front"></div>
+                                <div class="mini-mt-back">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-memotest-card" data-pair="1">
+                            <div class="mini-mt-inner">
+                                <div class="mini-mt-front"></div>
+                                <div class="mini-mt-back">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-memotest-card" data-pair="0">
+                            <div class="mini-mt-inner">
+                                <div class="mini-mt-front"></div>
+                                <div class="mini-mt-back">
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mini-memotest-card" data-pair="1">
+                            <div class="mini-mt-inner">
+                                <div class="mini-mt-front"></div>
+                                <div class="mini-mt-back">
+                                    <i class="fas fa-heart"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-info">
                     <span class="card-badge">Memoria</span>
@@ -175,6 +251,8 @@
                     <span>Jugar</span>
                     <span class="play-arrow">&rarr;</span>
                 </div>
+                <!-- Animated gradient border -->
+                <div class="card-glow-border"></div>
             </a>
         </div>
     </main>
@@ -184,31 +262,14 @@
         <p>Mini Arcade &copy; 2026 &mdash; Hecho con &#x2764;&#xFE0F; y mucho JavaScript</p>
     </footer>
 
+    <!-- Font Awesome for mini memotest icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <!-- Supabase SDK (CDN) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- App Scripts -->
     <script src="js/supabase-client.js"></script>
     <script src="js/auth.js"></script>
-    <script>
-        // Smooth scroll para el CTA
-        document.querySelector('.hero-cta').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('games').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // Intersection Observer para animar las cards al scroll
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, i) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, i * 150);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
-
-        document.querySelectorAll('.game-card').forEach(card => observer.observe(card));
-    </script>
+    <script src="js/home.js"></script>
 </body>
 </html>

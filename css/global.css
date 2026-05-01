@@ -2,6 +2,13 @@
    Mini Arcade - Estilos Globales Compartidos
    ============================================ */
 
+/* --- CSS Custom Property for animated gradient --- */
+@property --glow-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
 /* --- Variables y Reset --- */
 :root {
     --bg-dark: #111114;
