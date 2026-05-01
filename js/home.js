@@ -387,52 +387,8 @@
     };
 
     // =============================================
-    // ANIMATED GRADIENT BORDER
+    // INITIALIZATION HELPERS
     // =============================================
-    function initGlowBorders() {
-        // Use @property for CSS custom property animation
-        if (CSS.registerProperty) {
-            try {
-                CSS.registerProperty({
-                    name: '--glow-angle',
-                    syntax: '<angle>',
-                    initialValue: '0deg',
-                    inherits: false,
-                });
-            } catch (e) { /* already registered or not supported */ }
-        }
-
-        // Fallback: JS-driven rotation for browsers without @property
-        if (!CSS.registerProperty) {
-            const borders = $$('.card-glow-border');
-            let start = null;
-
-            function rotateBorder(timestamp) {
-                if (!start) start = timestamp;
-                const elapsed = timestamp - start;
-                const angle = (elapsed / 3000) * 360; // 3s per rotation
-
-                borders.forEach(b => {
-                    if (b.parentElement.matches('.game-card:hover')) {
-                        b.style.background = `conic-gradient(
-                            from ${angle}deg,
-                            transparent 0%,
-                            #ff6b35 10%,
-                            #a55eea 20%,
-                            #3742fa 30%,
-                            transparent 40%
-                        )`;
-                        b.style.opacity = '0.6';
-                    } else {
-                        b.style.opacity = '0';
-                    }
-                });
-
-                requestAnimationFrame(rotateBorder);
-            }
-            requestAnimationFrame(rotateBorder);
-        }
-    }
 
     // =============================================
     // COUNT-UP ANIMATION
@@ -476,8 +432,8 @@
     const Stats = {
         cached: null,
 
-        async load() {
-            if (!sb) return null;
+        async load(userId) {
+            if (!sb || !userId) return null;
 
             // Check cache
             const cached = sessionStorage.getItem('miniarcade_stats');
@@ -488,15 +444,12 @@
                 } catch (e) { /* ignore */ }
             }
 
-            const user = Auth.getCurrentUser();
-            if (!user) return null;
-
             try {
                 // Fetch all scores for this user
                 const { data, error } = await sb
                     .from('game_scores')
                     .select('*')
-                    .eq('user_id', user.id)
+                    .eq('user_id', userId)
                     .order('created_at', { ascending: false });
 
                 if (error) throw error;
@@ -504,12 +457,16 @@
                 const stats = this.processScores(data || []);
 
                 // Fetch username
-                const profile = await Auth.getProfile(user.id);
+                const profile = await Auth.getProfile(userId);
                 if (profile && profile.username) {
                     stats.username = profile.username;
-                } else if (user.email) {
-                    stats.username = user.email.split('@')[0];
-                    stats.username = stats.username.charAt(0).toUpperCase() + stats.username.slice(1);
+                } else {
+                    // Try to get email from session as fallback
+                    const session = await getSession();
+                    if (session?.user?.email) {
+                        const name = session.user.email.split('@')[0];
+                        stats.username = name.charAt(0).toUpperCase() + name.slice(1);
+                    }
                 }
 
                 // Cache for 5 minutes
@@ -729,9 +686,6 @@
         M3.init();
         MT.init();
 
-        // Initialize animated borders
-        initGlowBorders();
-
         // Card hover listeners
         initCardHovers();
 
@@ -780,21 +734,19 @@
     }
 
     async function loadStatsForUser() {
-        const user = Auth.getCurrentUser();
-        if (user) {
-            const stats = await Stats.load();
-            showStatsPanel(stats);
-        } else {
-            // Wait a moment to check if auth has initialized
-            setTimeout(async () => {
-                const session = await Auth.getSession();
-                if (session) {
-                    const stats = await Stats.load();
-                    showStatsPanel(stats);
-                } else {
-                    showGuestCTA();
-                }
-            }, 500);
+        // Always go through getSession() to avoid race condition
+        // with auth.js's internal currentSession not yet set
+        try {
+            const session = await getSession();
+            if (session && session.user) {
+                const stats = await Stats.load(session.user.id);
+                showStatsPanel(stats);
+            } else {
+                showGuestCTA();
+            }
+        } catch (e) {
+            console.warn('loadStatsForUser error:', e);
+            showGuestCTA();
         }
     }
 

@@ -145,8 +145,8 @@
     position: relative;
     z-index: 1;
     max-width: 700px;
-    margin: -20px auto 0;
-    padding: 0 20px 30px;
+    margin: 0 auto;
+    padding: 60px 20px 30px;
 }
 
 .stats-card {
@@ -305,8 +305,8 @@
     position: relative;
     z-index: 1;
     max-width: 600px;
-    margin: -20px auto 0;
-    padding: 0 20px 30px;
+    margin: 0 auto;
+    padding: 60px 20px 30px;
 }
 
 .guest-cta {
@@ -411,43 +411,6 @@
 
 .game-card:not(.card-coming-soon):hover .play-arrow {
     transform: translateX(4px);
-}
-
-/* --- Animated Gradient Border Glow --- */
-.card-glow-border {
-    position: absolute;
-    inset: -1px;
-    border-radius: 24px;
-    background: conic-gradient(
-        from var(--glow-angle, 0deg),
-        transparent 0%,
-        var(--accent) 10%,
-        var(--gem-purple) 20%,
-        var(--gem-blue) 30%,
-        transparent 40%
-    );
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: -1;
-    filter: blur(3px);
-}
-
-.game-card:not(.card-coming-soon):hover .card-glow-border {
-    opacity: 0.6;
-    animation: glowRotate 3s linear infinite;
-}
-
-@keyframes glowRotate {
-    0% { --glow-angle: 0deg; }
-    100% { --glow-angle: 360deg; }
-}
-
-/* Fallback for browsers without @property */
-@supports not (background: conic-gradient(from 0deg, red, blue)) {
-    .card-glow-border {
-        background: none;
-        box-shadow: inset 0 0 30px rgba(255, 107, 53, 0.15);
-    }
 }
 
 /* --- Card Preview --- */
