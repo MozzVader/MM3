@@ -179,7 +179,7 @@
     // ═══════════════════════════════════════════
     // CARD IDENTIFIER (para matching)
     // ═══════════════════════════════════════════
-    function cardId(card) {
+    function getMatchId(card) {
         if (card.image) return 'img_' + card.image;
         return (card.color || '') + '_' + (card.icon || '');
     }
@@ -890,7 +890,7 @@
             const c1 = cards[first.id];
             const c2 = cards[second.id];
 
-            if (cardId(c1) === cardId(c2)) {
+            if (getMatchId(c1) === getMatchId(c2)) {
                 // Match!
                 isProcessing = true;
                 setTimeout(() => {
