@@ -597,21 +597,21 @@
 }
 
 .user-menu-btn {
-    padding: 8px 16px;
+    padding: 8px 14px;
     border: none;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
     font-size: 0.85rem;
     font-weight: 600;
     color: var(--text-primary);
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 14px;
     display: flex;
     align-items: center;
     gap: 8px;
     transition: all var(--transition-speed) ease;
-}
-
-.user-menu-btn:hover {
-    border-color: rgba(255, 255, 255, 0.15);
 }
 
 /* --- User Avatar --- */
