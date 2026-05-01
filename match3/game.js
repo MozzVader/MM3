@@ -108,26 +108,29 @@
         try {
             if (typeof sb === 'undefined' || !sb) return;
             const { data: { session } } = await sb.auth.getSession();
-            if (!session?.user) return; // not logged in, skip silently
+            if (!session?.user) return;
 
-            const { error } = await sb.from('game_scores').insert({
+            const payload = {
                 user_id: session.user.id,
                 game_slug: 'match3',
-                score: score,
-                level: level,
+                score: Number(score),
+                level: Number(level),
                 metadata: {
-                    reason: reason, // 'level_complete' or 'game_over'
-                    moves_left: movesLeft,
+                    reason: reason,
+                    moves_left: Number(movesLeft),
                 },
-            });
+            };
+
+            console.log('[match3] Saving score payload:', JSON.stringify(payload));
+            const { data, error } = await sb.from('game_scores').insert(payload);
 
             if (error) {
-                console.warn('[match3] Supabase error:', error.message);
+                console.error('[match3] Supabase insert FAILED:', error.code, error.message, error.details);
             } else {
-                console.log('[match3] Score saved to Supabase (reason: ' + reason + ', score: ' + score + ')');
+                console.log('[match3] Score saved to Supabase:', data);
             }
         } catch (e) {
-            console.warn('[match3] Error saving score:', e);
+            console.error('[match3] Exception saving score:', e);
         }
     }
 
