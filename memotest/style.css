@@ -441,7 +441,8 @@ body {
 .pack-modal {
     max-width: 500px;
     width: 92%;
-    max-height: 85vh;
+    max-height: 90vh;
+    min-height: 300px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -493,8 +494,28 @@ body {
 .pack-modal-body {
     padding: 16px 20px;
     overflow-y: auto;
-    flex: 1;
+    flex: 1 1 auto;
+    min-height: 0;
     -webkit-overflow-scrolling: touch;
+}
+
+/* Scrollbar estilizado (dark theme) */
+.pack-modal-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.pack-modal-body::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 3px;
+}
+
+.pack-modal-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+}
+
+.pack-modal-body::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .pack-modal-footer {
@@ -503,7 +524,9 @@ body {
     gap: 10px;
     justify-content: center;
     flex-shrink: 0;
+    flex-wrap: wrap;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(17, 17, 20, 0.4);
 }
 
 .pack-footer-btn {
@@ -774,6 +797,28 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
+    /* En pantallas chicas, limitar altura para que quepa el boton de guardar */
+    max-height: 55vh;
+    overflow-y: auto;
+    padding-right: 4px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.editor-grid::-webkit-scrollbar {
+    width: 4px;
+}
+
+.editor-grid::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.editor-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+}
+
+.editor-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.18);
 }
 
 .editor-slot {
