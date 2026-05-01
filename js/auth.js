@@ -49,14 +49,16 @@
         if (authMenu) authMenu.style.display = 'none';
         if (userMenu) userMenu.style.display = 'flex';
 
-        // Cargar username y avatar
+        // Cargar username y avatar desde Google metadata
         if (session.user) {
             const metadata = session.user.user_metadata || {};
             const email = session.user.email || '';
             const displayName = metadata.full_name || metadata.name || email.split('@')[0] || '';
             const name = displayName.charAt(0).toUpperCase() + displayName.slice(1);
 
-            // Avatar: Google o fallback con inicial (se carga de inmediato)
+            if (usernameDisplay) usernameDisplay.textContent = name;
+
+            // Avatar: Google o fallback con inicial
             if (userAvatar) {
                 const avatarUrl = metadata.avatar_url || metadata.picture || '';
                 if (avatarUrl) {
@@ -72,15 +74,6 @@
                     userAvatar.textContent = name.charAt(0);
                 }
             }
-
-            // Cargar profile y luego mostrar username (evita flash Mozzvader -> Mozz)
-            getProfile(session.user.id).then(profile => {
-                const finalName = (profile && profile.username) ? profile.username : name;
-                if (usernameDisplay) usernameDisplay.textContent = finalName;
-                if (userAvatar && !userAvatar.querySelector('img')) {
-                    userAvatar.textContent = finalName.charAt(0).toUpperCase();
-                }
-            });
         }
     }
 
