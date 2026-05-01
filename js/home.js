@@ -4,7 +4,6 @@
    Mini Match 3 canvas auto-play
    Mini Memotest flip animation
    User stats panel with count-up
-   Animated gradient border on game cards
    */
 
 (function () {
@@ -456,15 +455,20 @@
 
                 const stats = this.processScores(data || []);
 
-                // Fetch username
-                const profile = await Auth.getProfile(userId);
+                // Fetch username — use sb directly to avoid scope issues
+                const { data: profile } = await sb
+                    .from('profiles')
+                    .select('username')
+                    .eq('id', userId)
+                    .single();
+
                 if (profile && profile.username) {
                     stats.username = profile.username;
                 } else {
                     // Try to get email from session as fallback
-                    const session = await getSession();
-                    if (session?.user?.email) {
-                        const name = session.user.email.split('@')[0];
+                    const { data: { session: sess } } = await sb.auth.getSession();
+                    if (sess?.user?.email) {
+                        const name = sess.user.email.split('@')[0];
                         stats.username = name.charAt(0).toUpperCase() + name.slice(1);
                     }
                 }
@@ -721,23 +725,49 @@
             });
         }
 
-        // Load stats based on auth state
-        await loadStatsForUser();
-
-        // Listen for auth changes
-        if (sb) {
-            onAuthStateChange(async (event, session) => {
+        // --- Auth: register listener FIRST, then check session ---
+        if (typeof sb !== 'undefined' && sb) {
+            // Listen for auth changes (login/logout)
+            sb.auth.onAuthStateChange((event, session) => {
+                console.log('[home] Auth event:', event, session ? 'user=' + session.user.id : 'no session');
                 Stats.clearCache();
-                await loadStatsForUser();
+                handleAuthSession(session);
             });
+
+            // Check current session
+            try {
+                const { data: { session } } = await sb.auth.getSession();
+                console.log('[home] Initial session:', session ? 'user=' + session.user.id : 'no session');
+                handleAuthSession(session);
+            } catch (e) {
+                console.warn('[home] getSession error:', e);
+                showGuestCTA();
+            }
+
+            // Fallback: if nothing showed after 2s, try once more
+            setTimeout(async () => {
+                const statsEl = $('#user-stats-section');
+                const guestEl = $('#guest-cta-section');
+                const nothingVisible = statsEl && statsEl.style.display === 'none' &&
+                                       (!guestEl || guestEl.style.display === 'none');
+                if (nothingVisible) {
+                    console.log('[home] Fallback retry: nothing visible after 2s');
+                    try {
+                        const { data: { session } } = await sb.auth.getSession();
+                        handleAuthSession(session);
+                    } catch (e) {
+                        showGuestCTA();
+                    }
+                }
+            }, 2000);
+        } else {
+            console.warn('[home] Supabase client not available');
+            showGuestCTA();
         }
     }
 
-    async function loadStatsForUser() {
-        // Always go through getSession() to avoid race condition
-        // with auth.js's internal currentSession not yet set
+    async function handleAuthSession(session) {
         try {
-            const session = await getSession();
             if (session && session.user) {
                 const stats = await Stats.load(session.user.id);
                 showStatsPanel(stats);
@@ -745,7 +775,7 @@
                 showGuestCTA();
             }
         } catch (e) {
-            console.warn('loadStatsForUser error:', e);
+            console.warn('[home] handleAuthSession error:', e);
             showGuestCTA();
         }
     }
