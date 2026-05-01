@@ -234,30 +234,12 @@
 }
 
 .moments-list {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
-}
-
-.moments-list::-webkit-scrollbar {
-    height: 4px;
-}
-
-.moments-list::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.moments-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
 }
 
 .moment-card {
-    flex-shrink: 0;
-    min-width: 160px;
     padding: 14px 16px;
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.04);

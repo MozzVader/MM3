@@ -520,7 +520,7 @@
                 date: s.created_at,
             }));
             allWithMeta.sort((a, b) => b.score - a.score);
-            topScores.push(...allWithMeta.slice(0, 3));
+            topScores.push(...allWithMeta.slice(0, 4));
 
             return {
                 totalGames: scores.length,
