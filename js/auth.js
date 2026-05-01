@@ -43,23 +43,48 @@
         const authMenu = $('#auth-menu');
         const userMenu = $('#user-menu');
         const usernameDisplay = $('#username-display');
+        const userAvatar = $('#user-avatar');
 
         if (authBtn) authBtn.style.display = 'none';
         if (authMenu) authMenu.style.display = 'none';
         if (userMenu) userMenu.style.display = 'flex';
 
-        // Cargar username
+        // Cargar username y avatar
         if (session.user) {
+            const metadata = session.user.user_metadata || {};
             const email = session.user.email || '';
-            const name = email.split('@')[0];
+            const displayName = metadata.full_name || metadata.name || email.split('@')[0] || '';
+            const name = displayName.charAt(0).toUpperCase() + displayName.slice(1);
             if (usernameDisplay) {
-                usernameDisplay.textContent = name.charAt(0).toUpperCase() + name.slice(1);
+                usernameDisplay.textContent = name;
+            }
+
+            // Avatar: Google o fallback con inicial
+            if (userAvatar) {
+                const avatarUrl = metadata.avatar_url || metadata.picture || '';
+                if (avatarUrl) {
+                    userAvatar.innerHTML = '';
+                    const img = document.createElement('img');
+                    img.src = avatarUrl;
+                    img.alt = name;
+                    img.onerror = function() {
+                        // Si falla la imagen, mostrar inicial
+                        userAvatar.textContent = name.charAt(0);
+                    };
+                    userAvatar.appendChild(img);
+                } else {
+                    userAvatar.textContent = name.charAt(0);
+                }
             }
 
             // Intentar cargar profile para username custom
             getProfile(session.user.id).then(profile => {
                 if (profile && profile.username) {
                     if (usernameDisplay) usernameDisplay.textContent = profile.username;
+                    // Actualizar inicial del avatar si no tiene imagen
+                    if (userAvatar && !userAvatar.querySelector('img')) {
+                        userAvatar.textContent = profile.username.charAt(0).toUpperCase();
+                    }
                 }
             });
         }

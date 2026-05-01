@@ -16,16 +16,16 @@
 
     // Configuracion de niveles: { target, moves, types }
     const LEVELS = [
-        { target: 1500,  moves: 25, types: 5 },
-        { target: 4000,  moves: 22, types: 5 },
-        { target: 8000,  moves: 22, types: 6 },
-        { target: 13000, moves: 20, types: 6 },
-        { target: 20000, moves: 20, types: 6 },
-        { target: 28000, moves: 18, types: 6 },
-        { target: 38000, moves: 18, types: 6 },
-        { target: 50000, moves: 16, types: 6 },
-        { target: 65000, moves: 16, types: 6 },
-        { target: 85000, moves: 15, types: 6 },
+        { target: 3000,  moves: 25, types: 5 },
+        { target: 8000,  moves: 22, types: 5 },
+        { target: 16000, moves: 22, types: 6 },
+        { target: 26000, moves: 20, types: 6 },
+        { target: 40000, moves: 20, types: 6 },
+        { target: 56000, moves: 18, types: 6 },
+        { target: 76000, moves: 18, types: 6 },
+        { target: 100000, moves: 16, types: 6 },
+        { target: 130000, moves: 16, types: 6 },
+        { target: 170000, moves: 15, types: 6 },
     ];
 
     // Nombres de combos por cascade
