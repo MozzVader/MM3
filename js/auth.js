@@ -55,11 +55,8 @@
             const email = session.user.email || '';
             const displayName = metadata.full_name || metadata.name || email.split('@')[0] || '';
             const name = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-            if (usernameDisplay) {
-                usernameDisplay.textContent = name;
-            }
 
-            // Avatar: Google o fallback con inicial
+            // Avatar: Google o fallback con inicial (se carga de inmediato)
             if (userAvatar) {
                 const avatarUrl = metadata.avatar_url || metadata.picture || '';
                 if (avatarUrl) {
@@ -68,7 +65,6 @@
                     img.src = avatarUrl;
                     img.alt = name;
                     img.onerror = function() {
-                        // Si falla la imagen, mostrar inicial
                         userAvatar.textContent = name.charAt(0);
                     };
                     userAvatar.appendChild(img);
@@ -77,14 +73,12 @@
                 }
             }
 
-            // Intentar cargar profile para username custom
+            // Cargar profile y luego mostrar username (evita flash Mozzvader -> Mozz)
             getProfile(session.user.id).then(profile => {
-                if (profile && profile.username) {
-                    if (usernameDisplay) usernameDisplay.textContent = profile.username;
-                    // Actualizar inicial del avatar si no tiene imagen
-                    if (userAvatar && !userAvatar.querySelector('img')) {
-                        userAvatar.textContent = profile.username.charAt(0).toUpperCase();
-                    }
+                const finalName = (profile && profile.username) ? profile.username : name;
+                if (usernameDisplay) usernameDisplay.textContent = finalName;
+                if (userAvatar && !userAvatar.querySelector('img')) {
+                    userAvatar.textContent = finalName.charAt(0).toUpperCase();
                 }
             });
         }

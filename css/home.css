@@ -605,6 +605,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    border-radius: 50px;
     transition: all var(--transition-speed) ease;
 }
 
