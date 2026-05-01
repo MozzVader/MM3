@@ -92,6 +92,14 @@
             <div class="start-content glass">
                 <h1 class="game-title">Memotest</h1>
                 <p class="game-subtitle">Pone a prueba tu memoria</p>
+
+                <!-- Pack selector -->
+                <button id="btn-select-pack" class="pack-selector-btn glass-sm">
+                    <i class="fa-solid fa-palette"></i>
+                    <span>Cartas: <strong id="active-pack-name">Clasico</strong></span>
+                    <i class="fa-solid fa-chevron-right chevron"></i>
+                </button>
+
                 <div class="difficulty-selection">
                     <span class="difficulty-label">Elegi dificultad:</span>
                     <div class="difficulty-buttons">
@@ -113,9 +121,11 @@
                         </button>
                     </div>
                 </div>
+
                 <div class="start-menu">
                     <button id="btn-new-game" class="btn btn-primary">Jugar</button>
                 </div>
+
                 <div class="high-score-display">
                     <span>Mejor Puntuacion:</span>
                     <span id="high-score-value">--</span>
@@ -125,14 +135,12 @@
 
         <!-- Pantalla de juego -->
         <div id="game-screen" class="screen">
-            <!-- Title bar -->
             <div class="game-title-bar">
                 <a href="../index.html" class="back-link" title="Volver al inicio">&larr;</a>
                 <span class="logo">Memotest</span>
                 <span id="diff-badge" class="level-badge">FACIL</span>
             </div>
 
-            <!-- Stats -->
             <header class="game-header glass-sm">
                 <div class="header-item">
                     <span class="header-label">Movimientos</span>
@@ -148,10 +156,8 @@
                 </div>
             </header>
 
-            <!-- Tablero de juego -->
             <div id="game-board" class="game-board glass-sm"></div>
 
-            <!-- Footer -->
             <div class="game-footer">MEMOTEST - MINI ARCADE</div>
         </div>
 
@@ -168,6 +174,163 @@
                 <button id="btn-play-again" class="btn btn-primary">Jugar de Nuevo</button>
                 <button id="btn-back-menu" class="btn btn-secondary">Menu Principal</button>
             </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════
+         PACK CONFIG MODAL
+         ═══════════════════════════════════════════ -->
+    <div id="pack-modal" class="overlay glass-dark">
+        <div class="pack-modal glass">
+
+            <!-- === VIEW 1: Pack Selection === -->
+            <div id="pack-selection">
+                <div class="pack-modal-header">
+                    <h2>Seleccionar Cartas</h2>
+                    <button id="pack-modal-close" class="modal-close-btn">&times;</button>
+                </div>
+
+                <div class="pack-modal-body">
+                    <!-- Official -->
+                    <div class="pack-section">
+                        <h3 class="pack-section-title">Oficiales</h3>
+                        <div id="official-packs" class="packs-grid"></div>
+                    </div>
+
+                    <!-- Custom -->
+                    <div class="pack-section">
+                        <div class="pack-section-header">
+                            <h3 class="pack-section-title">Mis Packs</h3>
+                            <button id="btn-create-pack" class="btn-new-pack">
+                                <i class="fa-solid fa-plus"></i> Nuevo
+                            </button>
+                        </div>
+                        <div id="custom-packs" class="packs-grid"></div>
+                        <div id="no-custom-packs" class="empty-packs-msg">
+                            <i class="fa-solid fa-box-open"></i>
+                            <p>No tenes packs personalizados</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pack-modal-footer">
+                    <button id="btn-import-pack" class="pack-footer-btn">
+                        <i class="fa-solid fa-file-import"></i> Importar pack
+                    </button>
+                    <button id="btn-download-template" class="pack-footer-btn">
+                        <i class="fa-solid fa-download"></i> Descargar plantilla
+                    </button>
+                </div>
+            </div>
+
+            <!-- === VIEW 2: Slot Editor === -->
+            <div id="slot-editor" style="display:none;">
+                <div class="pack-modal-header">
+                    <div class="editor-nav">
+                        <button id="btn-editor-back" class="btn-back-sm">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <h2 id="editor-title">Nuevo Pack</h2>
+                    </div>
+                </div>
+
+                <div class="pack-modal-body">
+                    <div class="editor-name-row">
+                        <label for="pack-name-input">Nombre</label>
+                        <input type="text" id="pack-name-input" placeholder="Ej: Animales" maxlength="20">
+                    </div>
+                    <div id="editor-grid" class="editor-grid"></div>
+                </div>
+
+                <div class="pack-modal-footer">
+                    <button id="btn-export-pack" class="pack-footer-btn" style="display:none;">
+                        <i class="fa-solid fa-share-from-square"></i> Exportar
+                    </button>
+                    <button id="btn-save-pack" class="btn btn-primary btn-sm">Guardar Pack</button>
+                </div>
+            </div>
+
+            <!-- === VIEW 3: Single Slot Editor === -->
+            <div id="slot-edit-form" style="display:none;">
+                <div class="pack-modal-header">
+                    <div class="editor-nav">
+                        <button id="btn-slot-back" class="btn-back-sm">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <h2>Editar Carta</h2>
+                    </div>
+                </div>
+
+                <div class="pack-modal-body slot-edit-body">
+                    <!-- Type tabs -->
+                    <div class="slot-type-tabs">
+                        <button class="slot-type-tab active" data-type="icon">
+                            <i class="fa-solid fa-icons"></i> Icono + Color
+                        </button>
+                        <button class="slot-type-tab" data-type="image">
+                            <i class="fa-solid fa-image"></i> Imagen URL
+                        </button>
+                    </div>
+
+                    <!-- Icon type content -->
+                    <div id="slot-icon-type" class="slot-type-content">
+                        <div class="edit-row">
+                            <label>Color</label>
+                            <div class="color-picker-row">
+                                <input type="color" id="slot-color" value="#FF4757">
+                                <div id="quick-colors" class="quick-colors"></div>
+                            </div>
+                        </div>
+                        <div class="edit-row">
+                            <label>Icono</label>
+                            <div id="icon-grid" class="icon-grid"></div>
+                        </div>
+                    </div>
+
+                    <!-- Image type content -->
+                    <div id="slot-image-type" class="slot-type-content" style="display:none;">
+                        <div class="edit-row">
+                            <label>URL de imagen</label>
+                            <input type="text" id="slot-image-url" placeholder="https://ejemplo.com/imagen.png">
+                            <p class="hint-text">Usa el boton "Descargar plantilla" para ver el tamaño ideal (400x600px, ratio 2:3)</p>
+                        </div>
+                    </div>
+
+                    <!-- Preview -->
+                    <div class="edit-row preview-row">
+                        <label>Vista previa</label>
+                        <div id="slot-preview-card" class="slot-preview-card"></div>
+                    </div>
+                </div>
+
+                <div class="pack-modal-footer">
+                    <button id="btn-save-slot" class="btn btn-primary btn-sm">Aplicar</button>
+                </div>
+            </div>
+
+            <!-- === VIEW 4: Import Form === -->
+            <div id="import-form" style="display:none;">
+                <div class="pack-modal-header">
+                    <div class="editor-nav">
+                        <button id="btn-import-back" class="btn-back-sm">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <h2 id="import-title">Importar Pack</h2>
+                    </div>
+                </div>
+
+                <div class="pack-modal-body">
+                    <textarea id="import-textarea" placeholder="Pega el codigo del pack aqui..." rows="6"></textarea>
+                </div>
+
+                <div class="pack-modal-footer">
+                    <button id="btn-copy-export" class="pack-footer-btn" style="display:none;">
+                        <i class="fa-solid fa-copy"></i> Copiar
+                    </button>
+                    <button id="btn-do-import" class="btn btn-primary btn-sm">Importar</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
