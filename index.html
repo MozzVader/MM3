@@ -119,9 +119,27 @@
         </div>
     </header>
 
-    <!-- User Stats Panel (only shown when logged in) -->
-    <section id="user-stats-section" class="stats-section" style="display: none;">
-        <div class="stats-card glass">
+    <!-- Guest CTA (shown when NOT logged in) -->
+    <section id="guest-cta-section" class="guest-cta-section" style="display: none;">
+        <div class="guest-cta glass">
+            <div class="guest-cta-icon">&#x1F3B5;</div>
+            <div class="guest-cta-text">
+                <strong>Inicia sesion para ver tus estadisticas</strong>
+                <span>Lleva el registro de tus partidas, compite en rankings y desbloquea logros.</span>
+            </div>
+            <button id="guest-login-btn" class="btn btn-secondary guest-cta-btn">Ingresar</button>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <main id="games" class="games-section">
+        <div class="section-header">
+            <h2 class="section-title">Juegos Disponibles</h2>
+            <p class="section-subtitle">Elegi tu favorito y empezá a jugar</p>
+        </div>
+
+        <!-- User Stats Aside (only shown when logged in) -->
+        <aside id="user-stats-section" class="stats-aside glass" style="display: none;">
             <div class="stats-greeting">
                 <span class="stats-hello">Hola,</span>
                 <span id="stats-username" class="stats-name">Jugador</span>
@@ -153,27 +171,7 @@
                 <div class="moments-title">Tus Mejores Momentos</div>
                 <div id="moments-list" class="moments-list"></div>
             </div>
-        </div>
-    </section>
-
-    <!-- Guest CTA (shown when NOT logged in) -->
-    <section id="guest-cta-section" class="guest-cta-section" style="display: none;">
-        <div class="guest-cta glass">
-            <div class="guest-cta-icon">&#x1F3B5;</div>
-            <div class="guest-cta-text">
-                <strong>Inicia sesion para ver tus estadisticas</strong>
-                <span>Lleva el registro de tus partidas, compite en rankings y desbloquea logros.</span>
-            </div>
-            <button id="guest-login-btn" class="btn btn-secondary guest-cta-btn">Ingresar</button>
-        </div>
-    </section>
-
-    <!-- Games Section -->
-    <main id="games" class="games-section">
-        <div class="section-header">
-            <h2 class="section-title">Juegos Disponibles</h2>
-            <p class="section-subtitle">Elegi tu favorito y empezá a jugar</p>
-        </div>
+        </aside>
 
         <div class="games-grid">
             <!-- Match 3 Card -->

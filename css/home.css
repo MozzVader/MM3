@@ -140,18 +140,13 @@
     100% { transform: translate(0, 0) rotate(360deg); opacity: 0.2; }
 }
 
-/* --- User Stats Section --- */
-.stats-section {
-    position: relative;
-    z-index: 1;
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 60px 20px 30px;
-}
-
-.stats-card {
-    padding: 28px 32px;
+/* --- User Stats Aside (inside games section) --- */
+.stats-aside {
+    max-width: 100%;
+    padding: 24px 28px;
+    margin-bottom: 36px;
     animation: slideInUp 0.5s ease-out;
+    border-radius: 16px;
 }
 
 .stats-greeting {
@@ -974,7 +969,12 @@
         font-size: 1.8rem;
     }
 
-    /* Stats grid: 2x2 on tablet */
+    /* Stats aside: compact on tablet */
+    .stats-aside {
+        padding: 20px 16px;
+        margin-bottom: 28px;
+    }
+
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1013,8 +1013,9 @@
         height: 110px;
     }
 
-    .stats-card {
-        padding: 20px 16px;
+    .stats-aside {
+        padding: 16px 12px;
+        margin-bottom: 24px;
     }
 
     .stats-grid {
