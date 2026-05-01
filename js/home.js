@@ -12,6 +12,9 @@
     const $ = (sel) => document.querySelector(sel);
     const $$ = (sel) => document.querySelectorAll(sel);
 
+    // Diagnostic: verify sb is accessible
+    console.log('[home] IIFE loaded, sb available:', typeof sb !== 'undefined' && !!sb);
+
     // =============================================
     // MINI MATCH 3 - Canvas Auto-Play
     // =============================================
@@ -540,37 +543,71 @@
     // =============================================
     // UI UPDATES
     // =============================================
-    function showStatsPanel(stats) {
+
+    /** Extract display name from session (email prefix, capitalized) */
+    function getNameFromSession(session) {
+        if (!session?.user) return 'Jugador';
+        const email = session.user.email || '';
+        const raw = email.split('@')[0] || 'Jugador';
+        return raw.charAt(0).toUpperCase() + raw.slice(1);
+    }
+
+    /**
+     * Show the user-stats-section because the user IS logged in.
+     * Always shows the section with username — even if stats fail to load.
+     */
+    function showLoggedInUI(session) {
         const statsSection = $('#user-stats-section');
         const guestSection = $('#guest-cta-section');
 
-        if (!stats || stats.totalGames === 0) {
-            // Logged in but no games yet
-            statsSection.style.display = 'none';
-            if (guestSection) {
-                guestSection.style.display = 'block';
-                const text = guestSection.querySelector('.guest-cta-text');
-                if (text) {
-                    text.innerHTML = `
-                        <strong>Tu perfil esta listo</strong>
-                        <span>Juega tu primera partida para ver tus estadisticas aqui.</span>
-                    `;
-                }
-                const btn = $('#guest-login-btn');
-                if (btn) btn.style.display = 'none';
-                const icon = guestSection.querySelector('.guest-cta-icon');
-                if (icon) icon.innerHTML = '&#x1F3AF;';
-            }
-            return;
-        }
-
+        // NEVER show guest CTA when user is logged in
         if (guestSection) guestSection.style.display = 'none';
+
+        // Always show stats section
         if (statsSection) statsSection.style.display = 'block';
 
-        // Update username
+        // Show username immediately from session
+        const nameEl = $('#stats-username');
+        if (nameEl) {
+            nameEl.textContent = getNameFromSession(session);
+        }
+
+        // Reset stat values to defaults while loading
+        const totalGamesEl = document.querySelector('[data-stat="totalGames"]');
+        const totalScoreEl = document.querySelector('[data-stat="totalScore"]');
+        const bestMatch3El = document.querySelector('[data-stat="bestMatch3"]');
+        const bestMemotestEl = document.querySelector('[data-stat="bestMemotest"]');
+        if (totalGamesEl) totalGamesEl.textContent = '...';
+        if (totalScoreEl) totalScoreEl.textContent = '...';
+        if (bestMatch3El) bestMatch3El.textContent = '...';
+        if (bestMemotestEl) bestMemotestEl.textContent = '...';
+
+        // Hide best moments while loading
+        const momentsSection = $('#best-moments');
+        if (momentsSection) momentsSection.style.display = 'none';
+    }
+
+    /** Populate the stats cards after data loads */
+    function populateStats(stats) {
+        if (!stats) return;
+
+        // Update username if profile has a custom one
         const nameEl = $('#stats-username');
         if (nameEl && stats.username) {
             nameEl.textContent = stats.username;
+        }
+
+        // No games yet → show empty state inline
+        if (stats.totalGames === 0) {
+            const totalGamesEl = document.querySelector('[data-stat="totalGames"]');
+            const totalScoreEl = document.querySelector('[data-stat="totalScore"]');
+            const bestMatch3El = document.querySelector('[data-stat="bestMatch3"]');
+            const bestMemotestEl = document.querySelector('[data-stat="bestMemotest"]');
+            if (totalGamesEl) totalGamesEl.textContent = '0';
+            if (totalScoreEl) totalScoreEl.textContent = '0';
+            if (bestMatch3El) bestMatch3El.textContent = '--';
+            if (bestMemotestEl) bestMemotestEl.textContent = '--';
+            return;
         }
 
         // Animate stats
@@ -637,13 +674,6 @@
             const icon = guestSection.querySelector('.guest-cta-icon');
             if (icon) icon.innerHTML = '&#x1F3B5;';
         }
-    }
-
-    function hideAllPanels() {
-        const statsSection = $('#user-stats-section');
-        const guestSection = $('#guest-cta-section');
-        if (statsSection) statsSection.style.display = 'none';
-        if (guestSection) guestSection.style.display = 'none';
     }
 
     // =============================================
@@ -767,16 +797,34 @@
     }
 
     async function handleAuthSession(session) {
-        try {
-            if (session && session.user) {
-                const stats = await Stats.load(session.user.id);
-                showStatsPanel(stats);
-            } else {
-                showGuestCTA();
-            }
-        } catch (e) {
-            console.warn('[home] handleAuthSession error:', e);
+        console.log('[home] handleAuthSession called, session:', !!session);
+
+        if (!session || !session.user) {
+            // NOT logged in → show guest CTA
             showGuestCTA();
+            return;
+        }
+
+        // LOGGED IN → immediately show stats section with username
+        showLoggedInUI(session);
+
+        // Then try to load stats from Supabase
+        try {
+            const stats = await Stats.load(session.user.id);
+            console.log('[home] Stats loaded:', stats ? `totalGames=${stats.totalGames}` : 'null');
+            populateStats(stats);
+        } catch (e) {
+            console.warn('[home] Stats load error:', e);
+            // Stats section is already visible with username and "..." values
+            // Just show dashes instead of loading indicators
+            const totalGamesEl = document.querySelector('[data-stat="totalGames"]');
+            const totalScoreEl = document.querySelector('[data-stat="totalScore"]');
+            const bestMatch3El = document.querySelector('[data-stat="bestMatch3"]');
+            const bestMemotestEl = document.querySelector('[data-stat="bestMemotest"]');
+            if (totalGamesEl) totalGamesEl.textContent = '--';
+            if (totalScoreEl) totalScoreEl.textContent = '--';
+            if (bestMatch3El) bestMatch3El.textContent = '--';
+            if (bestMemotestEl) bestMemotestEl.textContent = '--';
         }
     }
 
