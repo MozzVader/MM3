@@ -587,19 +587,17 @@
 }
 
 .nav-auth-btn {
-    padding: 8px 20px;
-    border: none;
+    padding: 8px 14px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: var(--text-secondary);
+    color: var(--text-primary);
     cursor: pointer;
     transition: all var(--transition-speed) ease;
-    border-radius: 10px;
+    border-radius: 50px;
 }
 
 .nav-auth-btn:hover {
     color: var(--accent);
-    border-color: rgba(255, 107, 53, 0.2);
 }
 
 /* --- User Menu --- */
