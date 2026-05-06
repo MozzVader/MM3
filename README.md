@@ -21,14 +21,14 @@
 
 ## Juegos
 
-### Match 3 🎮
+### Match 3 💎
 Agrupa 3 o mas gemas iguales para sumar puntos. Arrastra las gemas para intercambiarlas y genera cascadas y combos.
 
 | Feature | Detalle |
 |---------|---------|
-| Niveles | 10+ niveles con dificultad progresiva |
+| Niveles | 10 niveles manuales + infinitos con dificultad progresiva |
 | Mecanica | Drag & drop con snap |
-| Objetivo | Alcanzar el puntaje meta en cada nivel |
+| Objetivo | Alcanzar el puntaje meta en cada nivel (score acumulativo) |
 | Bonus | Cascadas, combos, multiplicadores de puntos |
 | Persistencia | Guarda partida y high score en localStorage |
 
@@ -46,6 +46,20 @@ Pone a prueba tu memoria encontrando los pares de cartas ocultas. Cartas con ani
 | Share packs | Exporta/Importa packs via codigo Base64 |
 | Plantilla | Descarga template PNG para disenar cartas |
 
+### Sudoku 🔢
+El clasico puzzle numerico. Completa la grilla 9x9 sin repetir numeros en filas, columnas ni cajas 3x3.
+
+| Feature | Detalle |
+|---------|---------|
+| Generador | Backtracking con solucion unica garantizada |
+| Dificultades | Facil (36 huecos), Medio (46), Dificil (54) |
+| Controles | Numpad en pantalla + teclado (flechas, 1-9, Delete) |
+| Notas | Modo pencil para candidatos en celdas vacias |
+| Pistas | Revela la celda correcta (cantidad segun dificultad) |
+| Errores | Maximo 3 errores por partida |
+| Scoring | Base por dificultad - penalizacion de tiempo, errores y pistas |
+| Highlighting | Resalta fila/columna/caja y numeros relacionados |
+
 ---
 
 ## Estructura del Proyecto
@@ -55,19 +69,24 @@ MM3/
 ├── index.html              # Landing page con selector de juegos
 ├── css/
 │   ├── global.css          # Estilos globales (glassmorphism, bg, botones)
-│   ├── home.css            # Estilos de la landing + auth modal
+│   ├── home.css            # Estilos de la landing + auth + stats modal
 │   └── setup.sql           # Schema de Supabase (3 tablas + RLS)
 ├── js/
 │   ├── supabase-client.js  # Inicializacion del cliente Supabase
-│   └── auth.js             # Sistema de autenticacion completo
+│   ├── auth.js             # Sistema de autenticacion completo
+│   └── home.js             # Logica de la landing + stats
 ├── match3/
 │   ├── index.html          # Pagina del Match 3
 │   ├── style.css           # Estilos especificos del Match 3
-│   └── game.js             # Motor del juego Match 3 (~1400 lineas)
-└── memotest/
-    ├── index.html          # Pagina del Memotest
-    ├── style.css           # Estilos especificos del Memotest
-    └── game.js             # Motor del Memotest + Pack Manager
+│   └── game.js             # Motor del juego Match 3
+├── memotest/
+│   ├── index.html          # Pagina del Memotest
+│   ├── style.css           # Estilos especificos del Memotest
+│   └── game.js             # Motor del Memotest + Pack Manager
+└── sudoku/
+    ├── index.html          # Pagina del Sudoku
+    ├── style.css           # Estilos especificos del Sudoku
+    └── game.js             # Generador + Motor del Sudoku
 ```
 
 ---
@@ -77,7 +96,7 @@ MM3/
 - **Frontend**: HTML5, CSS3, JavaScript vanilla (sin frameworks)
 - **Hosting**: GitHub Pages (static site)
 - **Auth**: Supabase Auth (Email/Password + Google OAuth)
-- **DB**: Supabase (PostgreSQL) — preparada para scores globales
+- **DB**: Supabase (PostgreSQL) — scores globales por juego
 - **Estilos**: Glassmorphism con `backdrop-filter`, CSS Grid, CSS custom properties
 - **Iconos**: Font Awesome 6.5 (CDN)
 - **Persistencia local**: localStorage para high scores y custom packs
@@ -95,7 +114,7 @@ cat css/setup.sql
 
 **Tablas:**
 - `profiles` — datos de usuario (auto-creado al registrarse)
-- `game_scores` — puntajes globales por juego y nivel
+- `game_scores` — puntajes globales por juego (match3, memotest, sudoku)
 - `memotest_configs` — packs compartidos por la comunidad (preparado para futuro)
 
 Todas con Row Level Security habilitado.
