@@ -916,18 +916,17 @@
         $('#moves-left').textContent = movesLeft;
         $('#level-badge-num').textContent = level;
 
-        // Barra de progreso
-        const progress = Math.min(100, (score / targetScore) * 100);
-        $('#progress-bar').style.width = `${progress}%`;
+        // Barra de progreso (GPU-accelerated via scaleX)
+        const progress = Math.min(1, score / targetScore);
+        $('#progress-bar').style.setProperty('--progress', progress);
 
-        // Cambio de color en movimientos
+        // Cambio de color en movimientos (CSS classes — no inline style reflow)
         const movesEl = $('#moves-left');
+        movesEl.classList.remove('moves-low', 'moves-medium');
         if (movesLeft <= 5) {
-            movesEl.style.color = '#ff4757';
+            movesEl.classList.add('moves-low');
         } else if (movesLeft <= 10) {
-            movesEl.style.color = '#ffa502';
-        } else {
-            movesEl.style.color = '';
+            movesEl.classList.add('moves-medium');
         }
     }
 

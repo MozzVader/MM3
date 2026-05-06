@@ -94,7 +94,7 @@
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
 }
 
 .diff-btn:hover {
@@ -226,6 +226,7 @@
     cursor: pointer;
     transition: background 0.15s ease;
     background: rgba(255, 255, 255, 0.03);
+    will-change: transform;
 }
 
 .sudoku-cell.border-left {
@@ -322,10 +323,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.15s ease;
+    transition: background 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     position: relative;
+    will-change: transform;
 }
 
 .numpad-btn:hover {

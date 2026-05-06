@@ -90,6 +90,7 @@
     position: absolute;
     opacity: 0.3;
     animation: floatAround 12s ease-in-out infinite;
+    will-change: transform, opacity;
 }
 
 .shape-1 {
@@ -197,7 +198,7 @@
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.06);
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
 }
 
 .stat-item:hover {
@@ -257,7 +258,7 @@
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    transition: all 0.3s ease;
+    transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .moment-card:hover {
@@ -334,11 +335,12 @@
     padding: 28px;
     text-decoration: none;
     color: inherit;
-    transition: all 0.35s ease;
+    transition: transform 0.35s ease, opacity 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
     opacity: 0;
     transform: translateY(30px);
     position: relative;
     overflow: hidden;
+    will-change: transform, opacity;
 }
 
 .game-card.visible {
@@ -592,7 +594,7 @@
     font-weight: 600;
     color: var(--text-primary);
     cursor: pointer;
-    transition: all var(--transition-speed) ease;
+    transition: color var(--transition-speed) ease, background var(--transition-speed) ease;
     border-radius: 50px;
     min-height: 44px;
     display: flex;
@@ -620,7 +622,7 @@
     align-items: center;
     gap: 8px;
     border-radius: 50px;
-    transition: all var(--transition-speed) ease;
+    transition: color var(--transition-speed) ease, background var(--transition-speed) ease;
 }
 
 /* --- User Avatar --- */
@@ -666,7 +668,7 @@
     opacity: 0;
     visibility: hidden;
     transform: translateY(-8px);
-    transition: all 0.2s ease;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
 }
 
 .user-dropdown.active {
@@ -686,7 +688,7 @@
     cursor: pointer;
     border-radius: 8px;
     text-align: left;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .dropdown-item:hover {
@@ -713,7 +715,7 @@
     cursor: pointer;
     padding: 8px 12px;
     border-radius: 8px;
-    transition: all 0.2s ease;
+    transition: color 0.2s ease, background 0.2s ease;
     line-height: 1;
     min-width: 44px;
     min-height: 44px;
@@ -747,7 +749,7 @@
     font-weight: 600;
     cursor: pointer;
     border-radius: 8px;
-    transition: all 0.25s ease;
+    transition: color 0.25s ease, background 0.25s ease;
 }
 
 .auth-tab.active {
@@ -803,7 +805,7 @@
     color: var(--text-primary);
     font-size: 0.9rem;
     font-family: inherit;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
     outline: none;
 }
 
@@ -861,7 +863,7 @@
     font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all var(--transition-speed) ease;
+    transition: background var(--transition-speed) ease, border-color var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
     box-shadow: none;
 }
 

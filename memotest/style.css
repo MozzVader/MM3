@@ -69,7 +69,7 @@ body {
     font-size: 0.9rem;
     font-family: inherit;
     cursor: pointer;
-    transition: all var(--transition-speed) ease;
+    transition: color var(--transition-speed) ease, border-color var(--transition-speed) ease, background var(--transition-speed) ease;
 }
 
 .pack-selector-btn i.fa-palette {
@@ -128,7 +128,7 @@ body {
     background: rgba(255, 255, 255, 0.03);
     color: var(--text-muted);
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: border-color 0.25s ease, color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
     font-family: inherit;
 }
 
@@ -209,7 +209,7 @@ body {
     font-weight: 700;
     padding: 8px 12px;
     border-radius: 8px;
-    transition: all var(--transition-speed) ease;
+    transition: color var(--transition-speed) ease, background var(--transition-speed) ease;
     min-height: 44px;
     display: flex;
     align-items: center;
@@ -278,6 +278,7 @@ body {
     position: relative;
     user-select: none;
     -webkit-user-select: none;
+    will-change: transform;
 }
 
 .memo-card .card-face {
@@ -291,6 +292,7 @@ body {
     -webkit-backface-visibility: hidden;
     transition: transform 0.45s ease;
     border: 1px solid rgba(255, 255, 255, 0.08);
+    will-change: transform;
 }
 
 .memo-card .card-back {
@@ -339,7 +341,7 @@ body {
 
 @keyframes matchPulse {
     0% { transform: rotateY(0deg) scale(1); }
-    30% { transform: rotateY(0deg) scale(1.08); box-shadow: 0 0 25px rgba(255, 255, 255, 0.2); }
+    30% { transform: rotateY(0deg) scale(1.08); opacity: 0.8; }
     100% { transform: rotateY(0deg) scale(1); }
 }
 
@@ -404,7 +406,8 @@ body {
 
 .result-star {
     font-size: 2.2rem;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    will-change: transform, opacity;
 }
 
 .result-star.star-earned {
@@ -506,7 +509,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease;
 }
 
 .modal-close-btn:hover {
@@ -564,7 +567,7 @@ body {
     font-size: 0.8rem;
     font-family: inherit;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
 }
 
 .pack-footer-btn:hover {
@@ -615,7 +618,7 @@ body {
     font-weight: 600;
     font-family: inherit;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-new-pack:hover {
@@ -636,7 +639,7 @@ body {
     border-radius: 14px;
     background: rgba(255, 255, 255, 0.03);
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
 }
 
 .pack-card:hover {
@@ -769,7 +772,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
+    transition: background 0.2s ease, color 0.2s ease;
     flex-shrink: 0;
 }
 
@@ -853,7 +856,7 @@ body {
     justify-content: center;
     cursor: pointer;
     position: relative;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, transform 0.2s ease;
     color: rgba(255, 255, 255, 0.7);
     font-size: 1.2rem;
     background-size: cover;
@@ -905,7 +908,7 @@ body {
     font-size: 0.8rem;
     font-family: inherit;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -994,7 +997,7 @@ input[type="color"]::-webkit-color-swatch {
     border-radius: 6px;
     cursor: pointer;
     border: 2px solid transparent;
-    transition: all 0.15s ease;
+    transition: transform 0.15s ease, border-color 0.15s ease;
 }
 
 .color-swatch:hover {
@@ -1041,7 +1044,7 @@ input[type="color"]::-webkit-color-swatch {
     color: var(--text-muted);
     font-size: 0.85rem;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
 }
 
 .icon-option:hover {
@@ -1093,7 +1096,7 @@ input[type="color"]::-webkit-color-swatch {
     background-position: center;
     border: 1px solid rgba(255, 255, 255, 0.1);
     margin: 0 auto;
-    transition: all 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 /* --- Import Textarea --- */
