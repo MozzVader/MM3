@@ -31,11 +31,14 @@
 }
 
 .game-title {
-    font-size: 3.2rem;
-    font-weight: 200;
-    color: var(--text-primary);
-    letter-spacing: 6px;
-    margin-bottom: 8px;
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: -4px;
+    background: linear-gradient(135deg, #00c896 0%, var(--accent) 50%, var(--gem-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0;
 }
 
 .game-subtitle {
@@ -443,7 +446,7 @@
     }
 
     .game-title {
-        font-size: 2.4rem;
+        font-size: 3rem;
     }
 
     .start-content {
@@ -484,7 +487,8 @@
     }
 
     .game-title {
-        font-size: 2rem;
+        font-size: 2.5rem;
+        letter-spacing: -2px;
     }
 
     .start-content {
