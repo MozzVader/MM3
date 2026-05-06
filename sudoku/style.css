@@ -135,6 +135,8 @@
     color: var(--text-secondary);
     text-decoration: none;
     transition: color 0.2s;
+    position: relative;
+    z-index: 2;
 }
 
 .game-title-bar .back-link:hover {
@@ -142,10 +144,13 @@
 }
 
 .game-title-bar .logo {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: 2px;
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #00c896, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .level-badge {
