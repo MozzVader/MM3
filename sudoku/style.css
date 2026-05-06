@@ -138,6 +138,11 @@
     transition: color 0.2s;
     position: relative;
     z-index: 2;
+    padding: 8px 12px;
+    border-radius: 8px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 
 .game-title-bar .back-link:hover {
@@ -305,8 +310,8 @@
 }
 
 .numpad-btn {
-    width: 44px;
-    height: 46px;
+    width: 46px;
+    height: 48px;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.05);
@@ -472,8 +477,8 @@
     }
 
     .numpad-btn {
-        width: 36px;
-        height: 40px;
+        width: 40px;
+        height: 44px;
         font-size: 1rem;
     }
 
@@ -518,9 +523,17 @@
     }
 
     .numpad-btn {
-        width: 30px;
-        height: 34px;
-        font-size: 0.9rem;
+        width: 33px;
+        height: 38px;
+        font-size: 0.85rem;
+    }
+
+    .numpad-row {
+        gap: 4px;
+    }
+
+    .numpad {
+        padding: 8px 10px;
     }
 
     .game-title {

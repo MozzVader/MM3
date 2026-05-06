@@ -6,9 +6,9 @@
 /* --- Variables del juego --- */
 :root {
     --board-size: 8;
-    --cell-size: 56px;
+    --cell-size: 52px;
     --gap: 4px;
-    --board-padding: 12px;
+    --board-padding: 10px;
 }
 
 body {
@@ -138,9 +138,12 @@ body {
     text-decoration: none;
     font-size: 1.4rem;
     font-weight: 700;
-    padding: 4px 10px;
+    padding: 8px 12px;
     border-radius: 8px;
     transition: all var(--transition-speed) ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 .back-link:hover {
     color: var(--accent);
@@ -540,7 +543,7 @@ body {
 /* --- Responsive --- */
 @media (max-width: 520px) {
     :root {
-        --cell-size: 42px;
+        --cell-size: 44px;
         --gap: 3px;
         --board-padding: 8px;
     }
@@ -587,7 +590,7 @@ body {
 
 @media (max-width: 380px) {
     :root {
-        --cell-size: 36px;
+        --cell-size: 40px;
         --gap: 2px;
     }
 

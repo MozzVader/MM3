@@ -207,9 +207,12 @@ body {
     text-decoration: none;
     font-size: 1.4rem;
     font-weight: 700;
-    padding: 4px 10px;
+    padding: 8px 12px;
     border-radius: 8px;
     transition: all var(--transition-speed) ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
 }
 .back-link:hover {
     color: var(--accent);
@@ -495,9 +498,9 @@ body {
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
     color: var(--text-muted);
-    font-size: 1.3rem;
-    width: 34px;
-    height: 34px;
+    font-size: 1.4rem;
+    width: 44px;
+    height: 44px;
     border-radius: 10px;
     cursor: pointer;
     display: flex;
@@ -700,7 +703,7 @@ body {
 
 .pack-action-btn {
     flex: 1;
-    padding: 5px;
+    padding: 8px 5px;
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.03);
@@ -755,8 +758,8 @@ body {
 }
 
 .btn-back-sm {
-    width: 32px;
-    height: 32px;
+    width: 44px;
+    height: 44px;
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.04);
@@ -986,8 +989,8 @@ input[type="color"]::-webkit-color-swatch {
 }
 
 .color-swatch {
-    width: 24px;
-    height: 24px;
+    width: 32px;
+    height: 32px;
     border-radius: 6px;
     cursor: pointer;
     border: 2px solid transparent;
@@ -1213,8 +1216,8 @@ input[type="color"]::-webkit-color-swatch {
     }
 
     .color-swatch {
-        width: 22px;
-        height: 22px;
+        width: 28px;
+        height: 28px;
     }
 }
 
@@ -1249,8 +1252,8 @@ input[type="color"]::-webkit-color-swatch {
     }
 
     .color-swatch {
-        width: 20px;
-        height: 20px;
+        width: 26px;
+        height: 26px;
     }
 
     .slot-preview-card {
