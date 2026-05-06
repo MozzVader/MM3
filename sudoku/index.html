@@ -148,24 +148,28 @@
 
             <!-- Numpad -->
             <div class="numpad glass-sm">
-                <button class="numpad-btn" data-num="1">1</button>
-                <button class="numpad-btn" data-num="2">2</button>
-                <button class="numpad-btn" data-num="3">3</button>
-                <button class="numpad-btn" data-num="4">4</button>
-                <button class="numpad-btn" data-num="5">5</button>
-                <button class="numpad-btn" data-num="6">6</button>
-                <button class="numpad-btn" data-num="7">7</button>
-                <button class="numpad-btn" data-num="8">8</button>
-                <button class="numpad-btn" data-num="9">9</button>
-                <button id="btn-erase" class="numpad-btn numpad-btn-action">
-                    <i class="fa-solid fa-eraser"></i>
-                </button>
-                <button id="btn-hint" class="numpad-btn numpad-btn-action">
-                    <i class="fa-solid fa-lightbulb"></i>
-                </button>
-                <button id="btn-notes-toggle" class="numpad-btn numpad-btn-action">
-                    <i class="fa-solid fa-pencil"></i>
-                </button>
+                <div class="numpad-row">
+                    <button class="numpad-btn" data-num="1">1</button>
+                    <button class="numpad-btn" data-num="2">2</button>
+                    <button class="numpad-btn" data-num="3">3</button>
+                    <button class="numpad-btn" data-num="4">4</button>
+                    <button class="numpad-btn" data-num="5">5</button>
+                    <button class="numpad-btn" data-num="6">6</button>
+                    <button class="numpad-btn" data-num="7">7</button>
+                    <button class="numpad-btn" data-num="8">8</button>
+                    <button class="numpad-btn" data-num="9">9</button>
+                </div>
+                <div class="numpad-row">
+                    <button id="btn-erase" class="numpad-btn numpad-btn-action" data-tooltip="Borrar">
+                        <i class="fa-solid fa-eraser"></i>
+                    </button>
+                    <button id="btn-hint" class="numpad-btn numpad-btn-action" data-tooltip="Pista">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </button>
+                    <button id="btn-notes-toggle" class="numpad-btn numpad-btn-action" data-tooltip="Notas">
+                        <i class="fa-solid fa-pencil"></i>
+                    </button>
+                </div>
             </div>
 
             <!-- Game controls -->
