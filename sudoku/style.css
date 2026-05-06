@@ -1,0 +1,286 @@
+/* ============================================
+   Sudoku - Game Styles
+   ============================================ */
+
+/* --- Start Screen --- */
+.game-title {
+    font-size: 3rem;
+    font-weight: 200;
+    color: var(--text-primary);
+    letter-spacing: 6px;
+    margin-bottom: 8px;
+}
+
+.game-subtitle {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: 32px;
+}
+
+/* Deco cells */
+.start-decorations {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    justify-content: center;
+}
+
+.deco-cell {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(255, 107, 53, 0.1);
+    border: 1px solid rgba(255, 107, 53, 0.2);
+}
+
+/* Difficulty selector */
+.difficulty-select {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.diff-btn {
+    padding: 8px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.diff-btn:hover {
+    border-color: rgba(255, 255, 255, 0.25);
+    color: var(--text-primary);
+}
+
+.diff-btn.active {
+    background: rgba(255, 107, 53, 0.15);
+    border-color: rgba(255, 107, 53, 0.4);
+    color: var(--accent);
+}
+
+/* --- Sudoku Grid --- */
+.sudoku-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    width: min(90vw, 420px);
+    height: min(90vw, 420px);
+    margin: 0 auto;
+    padding: 4px;
+    border-radius: 12px;
+    gap: 1px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.sudoku-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.sudoku-cell.border-left {
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.sudoku-cell.border-top {
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.sudoku-cell.cell-highlight {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.sudoku-cell.cell-same-number {
+    background: rgba(0, 200, 150, 0.1);
+}
+
+.sudoku-cell.cell-selected {
+    background: rgba(255, 107, 53, 0.2) !important;
+    box-shadow: inset 0 0 0 2px rgba(255, 107, 53, 0.5);
+}
+
+.sudoku-cell.cell-given .cell-value {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.sudoku-cell.cell-user .cell-value {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.sudoku-cell.cell-error .cell-value {
+    color: #ff4757;
+}
+
+.cell-value {
+    font-size: clamp(1rem, 3.5vw, 1.4rem);
+    line-height: 1;
+    user-select: none;
+    z-index: 1;
+}
+
+/* Notes mini-grid */
+.cell-notes {
+    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 100%;
+    height: 100%;
+    padding: 1px;
+    z-index: 1;
+}
+
+.note-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.45rem, 1.2vw, 0.6rem);
+    color: var(--text-muted);
+    line-height: 1;
+    user-select: none;
+}
+
+/* --- Numpad --- */
+.numpad {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 16px auto;
+    max-width: 400px;
+    padding: 10px;
+    border-radius: 14px;
+}
+
+.numpad-btn {
+    width: 40px;
+    height: 44px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.numpad-btn:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.numpad-btn:active,
+.numpad-press {
+    background: rgba(255, 107, 53, 0.25);
+    border-color: rgba(255, 107, 53, 0.4);
+    transform: scale(0.95);
+}
+
+.numpad-btn-action {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.numpad-btn-action.notes-active {
+    background: rgba(0, 200, 150, 0.2);
+    border-color: rgba(0, 200, 150, 0.5);
+    color: #00c896;
+}
+
+/* Numpad number count dimming (when all 9 placed) */
+.numpad-btn[data-num].num-complete {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* --- Game Controls --- */
+.game-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 12px 0;
+}
+
+.btn-sm {
+    padding: 8px 20px;
+    font-size: 0.8rem;
+}
+
+.game-footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 4px;
+}
+
+/* --- Animations --- */
+@keyframes cellPop {
+    0% { transform: scale(0.5); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.sudoku-cell.cell-user .cell-value {
+    animation: cellPop 0.2s ease-out;
+}
+
+/* --- Responsive --- */
+@media (max-width: 480px) {
+    .sudoku-grid {
+        width: min(94vw, 360px);
+        height: min(94vw, 360px);
+    }
+
+    .numpad-btn {
+        width: 34px;
+        height: 38px;
+        font-size: 1rem;
+    }
+
+    .numpad {
+        gap: 4px;
+        padding: 8px;
+    }
+
+    .game-title {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .sudoku-grid {
+        width: 95vw;
+        height: 95vw;
+    }
+
+    .numpad-btn {
+        width: 30px;
+        height: 34px;
+        font-size: 0.9rem;
+    }
+}

@@ -153,6 +153,12 @@
     grid-template-columns: repeat(2, 1fr);
 }
 
+@media (min-width: 520px) {
+    .stats-modal .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 .stats-greeting {
     text-align: center;
     margin-bottom: 24px;
@@ -173,9 +179,16 @@
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
     margin-bottom: 8px;
+}
+
+@media (min-width: 640px) {
+    .stats-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+    }
 }
 
 .stat-item {
@@ -921,6 +934,38 @@
 .dropdown-item-stats:hover {
     color: var(--accent) !important;
     background: rgba(255, 107, 53, 0.08) !important;
+}
+
+/* --- Mini Sudoku Preview --- */
+.mini-sudoku-board {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    align-items: center;
+}
+
+.mini-sudoku-row {
+    display: flex;
+    gap: 2px;
+}
+
+.mini-sudoku-row span {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mini-sudoku-row .mini-sudoku-blank {
+    background: transparent;
+    border-color: rgba(255, 255, 255, 0.03);
 }
 
 /* --- Responsive --- */

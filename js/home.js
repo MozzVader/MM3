@@ -428,6 +428,10 @@
         return `${mins}:${secs.toString().padStart(2, '0')}`;
     }
 
+    function capitalize(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
     // =============================================
     // USER STATS
     // =============================================
@@ -491,9 +495,11 @@
         processScores(scores) {
             const match3Scores = scores.filter(s => s.game_slug === 'match3');
             const memotestScores = scores.filter(s => s.game_slug === 'memotest');
+            const sudokuScores = scores.filter(s => s.game_slug === 'sudoku');
 
             let bestMatch3 = 0;
             let bestMemotest = null;
+            let bestSudoku = 0;
             let totalScore = 0;
             const topScores = [];
 
@@ -511,7 +517,12 @@
                 }
             });
 
-            // Collect top 3 overall scores for "Best Moments"
+            sudokuScores.forEach(s => {
+                totalScore += s.score;
+                if (s.score > bestSudoku) bestSudoku = s.score;
+            });
+
+            // Collect top 4 overall scores for "Best Moments"
             const allWithMeta = scores.map(s => ({
                 game: s.game_slug,
                 score: s.score,
@@ -527,9 +538,11 @@
                 totalScore,
                 bestMatch3,
                 bestMemotest: bestMemotest ? Math.round(bestMemotest) : null,
+                bestSudoku,
                 topScores,
                 match3Count: match3Scores.length,
                 memotestCount: memotestScores.length,
+                sudokuCount: sudokuScores.length,
             };
         },
 
@@ -577,10 +590,12 @@
             const totalScoreEl = document.querySelector('[data-stat="totalScore"]');
             const bestMatch3El = document.querySelector('[data-stat="bestMatch3"]');
             const bestMemotestEl = document.querySelector('[data-stat="bestMemotest"]');
+            const bestSudokuEl = document.querySelector('[data-stat="bestSudoku"]');
             if (totalGamesEl) totalGamesEl.textContent = '0';
             if (totalScoreEl) totalScoreEl.textContent = '0';
             if (bestMatch3El) bestMatch3El.textContent = '--';
             if (bestMemotestEl) bestMemotestEl.textContent = '--';
+            if (bestSudokuEl) bestSudokuEl.textContent = '--';
             return;
         }
 
@@ -589,6 +604,7 @@
         const totalScoreEl = document.querySelector('[data-stat="totalScore"]');
         const bestMatch3El = document.querySelector('[data-stat="bestMatch3"]');
         const bestMemotestEl = document.querySelector('[data-stat="bestMemotest"]');
+        const bestSudokuEl = document.querySelector('[data-stat="bestSudoku"]');
 
         if (totalGamesEl) countUp(totalGamesEl, stats.totalGames, 600);
         if (totalScoreEl) countUp(totalScoreEl, stats.totalScore, 1000);
@@ -600,6 +616,13 @@
                 bestMemotestEl.textContent = '--';
             }
         }
+        if (bestSudokuEl) {
+            if (stats.bestSudoku) {
+                countUp(bestSudokuEl, stats.bestSudoku, 800);
+            } else {
+                bestSudokuEl.textContent = '--';
+            }
+        }
 
         // Best moments
         const momentsSection = $('#best-moments');
@@ -607,13 +630,19 @@
         if (momentsSection && momentsList && stats.topScores.length > 0) {
             momentsSection.style.display = 'block';
             momentsList.innerHTML = stats.topScores.map(s => {
-                const gameName = s.game === 'match3' ? 'Match 3' : 'Memotest';
-                const gameIcon = s.game === 'match3' ? '&#x1F48E;' : '&#x1F0CF;';
+                const gameNames = { match3: 'Match 3', memotest: 'Memotest', sudoku: 'Sudoku' };
+                const gameIcons = { match3: '&#x1F48E;', memotest: '&#x1F0CF;', sudoku: '&#x1F9E9;' };
+                const gameName = gameNames[s.game] || s.game;
+                const gameIcon = gameIcons[s.game] || '&#x1F3AE;';
                 const scoreDisplay = s.game === 'memotest' && s.metadata?.time
                     ? `${formatTime(Math.round(s.metadata.time))}`
                     : s.score.toLocaleString('es-AR');
                 const metaParts = [];
                 if (s.level) metaParts.push(`Nivel ${s.level}`);
+                if (s.metadata?.difficulty) metaParts.push(capitalize(s.metadata.difficulty));
+                if (s.metadata?.time && s.game !== 'memotest') {
+                    metaParts.push(formatTime(s.metadata.time));
+                }
                 if (s.date) {
                     const d = new Date(s.date);
                     metaParts.push(d.toLocaleDateString('es-AR'));
