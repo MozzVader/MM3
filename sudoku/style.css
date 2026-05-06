@@ -2,9 +2,36 @@
    Sudoku - Game Styles
    ============================================ */
 
+/* --- Screen System --- */
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 60px);
+    padding: 20px;
+    animation: fadeIn 0.4s ease;
+}
+
+.screen.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* --- Start Screen --- */
+.start-content {
+    text-align: center;
+    width: 100%;
+    max-width: 420px;
+    padding: 44px 32px;
+}
+
 .game-title {
-    font-size: 3rem;
+    font-size: 3.2rem;
     font-weight: 200;
     color: var(--text-primary);
     letter-spacing: 6px;
@@ -39,20 +66,28 @@
     border: 1px solid rgba(255, 107, 53, 0.2);
 }
 
+.start-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
 /* Difficulty selector */
 .difficulty-select {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
+    margin-bottom: 8px;
 }
 
 .diff-btn {
-    padding: 8px 20px;
+    padding: 10px 24px;
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: 10px;
     background: transparent;
     color: var(--text-secondary);
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -69,6 +104,91 @@
     color: var(--accent);
 }
 
+.high-score-display {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+}
+
+.high-score-display span:last-child {
+    color: var(--text-primary);
+    font-weight: 700;
+    margin-left: 6px;
+}
+
+/* --- Title Bar --- */
+.game-title-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 12px;
+    padding: 0 4px;
+}
+
+.game-title-bar .back-link {
+    font-size: 1.3rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.game-title-bar .back-link:hover {
+    color: var(--accent);
+}
+
+.game-title-bar .logo {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+}
+
+.level-badge {
+    margin-left: auto;
+    padding: 4px 14px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: rgba(255, 107, 53, 0.12);
+    color: var(--accent);
+    border: 1px solid rgba(255, 107, 53, 0.2);
+}
+
+/* --- Game Header --- */
+.game-header {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 14px;
+    padding: 14px 12px;
+}
+
+.header-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.header-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.header-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
 /* --- Sudoku Grid --- */
 .sudoku-grid {
     display: grid;
@@ -77,7 +197,7 @@
     width: min(90vw, 420px);
     height: min(90vw, 420px);
     margin: 0 auto;
-    padding: 4px;
+    padding: 6px;
     border-radius: 12px;
     gap: 1px;
     background: rgba(255, 255, 255, 0.04);
@@ -164,8 +284,8 @@
     flex-wrap: wrap;
     justify-content: center;
     margin: 16px auto;
-    max-width: 400px;
-    padding: 10px;
+    max-width: 420px;
+    padding: 12px;
     border-radius: 14px;
 }
 
@@ -238,6 +358,61 @@
     letter-spacing: 4px;
 }
 
+/* --- Overlays --- */
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.overlay.active {
+    display: flex;
+}
+
+.overlay-content {
+    padding: 44px 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 92%;
+    animation: slideInUp 0.3s ease;
+}
+
+.overlay-content h2 {
+    font-size: 1.7rem;
+    margin-bottom: 24px;
+}
+
+.overlay-content .level-stats {
+    margin-bottom: 28px;
+}
+
+.overlay-content .level-stats p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 8px 0;
+}
+
+.overlay-content .level-stats p span {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.overlay-content .btn {
+    margin: 6px auto;
+    display: block;
+    width: 100%;
+    max-width: 260px;
+}
+
+@keyframes slideInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 /* --- Animations --- */
 @keyframes cellPop {
     0% { transform: scale(0.5); opacity: 0; }
@@ -268,7 +443,31 @@
     }
 
     .game-title {
-        font-size: 2.2rem;
+        font-size: 2.4rem;
+    }
+
+    .start-content {
+        padding: 32px 20px;
+    }
+
+    .overlay-content {
+        padding: 32px 24px;
+    }
+
+    .overlay-content h2 {
+        font-size: 1.4rem;
+    }
+
+    .game-header {
+        padding: 10px 8px;
+    }
+
+    .header-value {
+        font-size: 1.1rem;
+    }
+
+    .game-title-bar .logo {
+        font-size: 1.3rem;
     }
 }
 
@@ -282,5 +481,13 @@
         width: 30px;
         height: 34px;
         font-size: 0.9rem;
+    }
+
+    .game-title {
+        font-size: 2rem;
+    }
+
+    .start-content {
+        padding: 24px 16px;
     }
 }
