@@ -759,6 +759,43 @@
             });
         }
 
+        // Footer share buttons
+        $$('.footer-share-btn[data-url]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                window.open(btn.dataset.url, '_blank');
+            });
+        });
+        const copyBtn = $('#footer-copy-link');
+        if (copyBtn) {
+            // On mobile, use Web Share API if available
+            if (navigator.share) {
+                copyBtn.classList.add('footer-share-native');
+                copyBtn.innerHTML = '<i class="fa-solid fa-share-nodes"></i>';
+                copyBtn.title = 'Compartir';
+                copyBtn.addEventListener('click', async () => {
+                    try {
+                        await navigator.share({
+                            title: 'Mini Arcade - Juegos Online Gratis',
+                            text: 'Juega Match 3, Memotest y Sudoku gratis en tu navegador!',
+                            url: 'https://mozzvader.github.io/MM3/'
+                        });
+                    } catch (e) { /* user cancelled */ }
+                });
+            } else {
+                copyBtn.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText('https://mozzvader.github.io/MM3/');
+                        copyBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+                        copyBtn.title = 'Copiado!';
+                        setTimeout(() => {
+                            copyBtn.innerHTML = '<i class="fa-regular fa-clipboard"></i>';
+                            copyBtn.title = 'Copiar link';
+                        }, 2000);
+                    } catch { /* fallback ignored */ }
+                });
+            }
+        }
+
         // Intersection Observer for game cards
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, i) => {

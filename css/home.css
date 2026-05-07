@@ -925,6 +925,54 @@
     color: var(--accent);
 }
 
+/* --- Footer Share --- */
+.footer-actions {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-share {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer-share-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.footer-share-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-secondary);
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-speed) ease, background var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.footer-share-btn:hover {
+    transform: translateY(-2px);
+}
+
+.footer-share-btn:active {
+    transform: translateY(0);
+}
+
+.footer-share-wa:hover  { background: #25D366; border-color: #25D366; color: white; }
+.footer-share-tw:hover  { background: #000000; border-color: #000000; color: white; }
+.footer-share-fb:hover  { background: #1877F2; border-color: #1877F2; color: white; }
+.footer-share-copy:hover { background: rgba(255,255,255,0.12); border-color: var(--accent); color: var(--accent); }
+
 /* --- Dropdown Divider --- */
 .dropdown-divider {
     height: 1px;
