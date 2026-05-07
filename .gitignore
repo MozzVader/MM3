@@ -1,0 +1,25 @@
+# Entorno local
+.env
+.env.*
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# SQL (Supabase va por consola)
+*.sql
+
+# Node (por si alguna vez se usa)
+node_modules/
+package-lock.json
+
+# Build artefacts (no aplicamos, pero previene)
+dist/
+.cache/
