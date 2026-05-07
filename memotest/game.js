@@ -991,6 +991,8 @@
             $('#final-score').textContent = score;
             renderStars(stars);
             showOverlay($('#win-overlay'));
+            MiniShare.inject($('#win-overlay').querySelector('.overlay-content'), 'memotest',
+                MiniShare.buildMemotestData(currentDifficulty, moves, formatTime(seconds), score, stars));
         }, 600);
     }
 

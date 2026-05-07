@@ -788,6 +788,8 @@
                 $('#level-score').textContent = score;
                 $('#level-moves').textContent = movesLeft;
                 showOverlay(levelCompleteOverlay);
+                MiniShare.inject(levelCompleteOverlay.querySelector('.overlay-content'), 'match3',
+                    MiniShare.buildMatch3Data(level, score, movesLeft));
             }, 300);
             return;
         }
@@ -800,6 +802,8 @@
                 $('#final-score').textContent = score;
                 $('#final-level').textContent = level;
                 showOverlay(gameOverOverlay);
+                MiniShare.inject(gameOverOverlay.querySelector('.overlay-content'), 'match3',
+                    MiniShare.buildMatch3GameOverData(level, score));
             }, 300);
             return;
         }

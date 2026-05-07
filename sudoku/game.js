@@ -423,12 +423,17 @@
         $('final-errors').textContent = gameState.errors;
         $('final-score').textContent = score;
         showOverlay($('win-overlay'));
+        MiniShare.inject($('win-overlay').querySelector('.overlay-content'), 'sudoku',
+            MiniShare.buildSudokuData(gameState.difficulty, formatTime(gameState.timer), gameState.errors, score));
     }
 
     function gameOver() {
         stopTimer();
         gameState.playing = false;
+        const config = DIFICULTADES[gameState.difficulty];
         showOverlay($('gameover-overlay'));
+        MiniShare.inject($('gameover-overlay').querySelector('.overlay-content'), 'sudoku',
+            MiniShare.buildSudokuData(gameState.difficulty, formatTime(gameState.timer), gameState.errors, null));
     }
 
     function calculateScore() {
