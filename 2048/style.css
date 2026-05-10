@@ -133,9 +133,10 @@
 .game-title-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 12px;
     width: 100%;
-    margin-bottom: 12px;
+    max-width: 500px;
+    margin: 0 auto 12px;
     padding: 0 4px;
 }
 
@@ -147,6 +148,8 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .back-link {
@@ -167,6 +170,7 @@
 }
 
 .level-badge {
+    flex-shrink: 0;
     margin-left: auto;
     padding: 4px 14px;
     border-radius: 8px;
@@ -184,7 +188,8 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 6px;
     width: 100%;
-    margin-bottom: 14px;
+    max-width: 500px;
+    margin: 0 auto 14px;
     padding: 14px 12px;
 }
 
@@ -326,7 +331,8 @@
     display: flex;
     gap: 12px;
     justify-content: center;
-    margin: 16px 0;
+    margin: 16px auto;
+    max-width: 500px;
 }
 
 .btn-sm {
