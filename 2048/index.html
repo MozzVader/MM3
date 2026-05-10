@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sudoku - Mini Arcade</title>
-    <meta name="description" content="Sudoku clásico: completá la grilla 9x9 sin repetir números en filas, columnas ni cajas. 3 dificultades, pistas, notas y timer. Gratis en tu navegador.">
-    <meta name="theme-color" content="#0a1a0a">
+    <title>2048 - Mini Arcade</title>
+    <meta name="description" content="2048 Gemas: fusiona gemas iguales para crear las mas raras y poderosas. Desliza, suma y alcanza la gema legendaria. Gratis en tu navegador.">
+    <meta name="theme-color" content="#1a0a2e">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://mozzvader.github.io/MM3/sudoku/">
+    <link rel="canonical" href="https://mozzvader.github.io/MM3/2048/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Sudoku - Mini Arcade">
-    <meta property="og:description" content="Completá la grilla 9x9 sin repetir números. 3 dificultades, pistas, notas y timer. ¡Gratis!">
-    <meta property="og:url" content="https://mozzvader.github.io/MM3/sudoku/">
-    <meta property="og:image" content="https://mozzvader.github.io/MM3/img/og-sudoku.png">
+    <meta property="og:title" content="2048 Gemas - Mini Arcade">
+    <meta property="og:description" content="Fusiona gemas iguales para crear las mas raras. Desliza y alcanza la gema legendaria!">
+    <meta property="og:url" content="https://mozzvader.github.io/MM3/2048/">
+    <meta property="og:image" content="https://mozzvader.github.io/MM3/img/og-2048.png">
     <meta property="og:image:width" content="1344">
     <meta property="og:image:height" content="768">
     <meta property="og:site_name" content="Mini Arcade">
@@ -22,14 +22,14 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Sudoku - Mini Arcade">
-    <meta name="twitter:description" content="Completá la grilla 9x9 sin repetir números. 3 dificultades, pistas y timer.">
-    <meta name="twitter:image" content="https://mozzvader.github.io/MM3/img/og-sudoku.png">
+    <meta name="twitter:title" content="2048 Gemas - Mini Arcade">
+    <meta name="twitter:description" content="Fusiona gemas y alcanza la legendaria! Juego 2048 con skin de gemas.">
+    <meta name="twitter:image" content="https://mozzvader.github.io/MM3/img/og-2048.png">
 
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/home.css">
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F9E9;</text></svg">">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F48E;</text></svg>">
 </head>
 <body>
     <!-- Auth Navbar (shared) -->
@@ -112,26 +112,30 @@
         <!-- Start Screen -->
         <div id="start-screen" class="screen active">
             <div class="start-content glass">
-                <h1 class="game-title">Sudoku</h1>
-                <p class="game-subtitle">Clasico Puzzle Numerico</p>
-                <div class="start-decorations">
-                    <div class="deco-cell">1</div>
-                    <div class="deco-cell">5</div>
-                    <div class="deco-cell">9</div>
-                    <div class="deco-cell">3</div>
-                    <div class="deco-cell">7</div>
+                <h1 class="game-title">2048</h1>
+                <p class="game-subtitle">Fusion de Gemas</p>
+
+                <div class="start-decorations-2048">
+                    <div class="deco-gem">2</div>
+                    <div class="deco-gem">4</div>
+                    <div class="deco-gem">16</div>
+                    <div class="deco-gem">64</div>
+                    <div class="deco-gem">128</div>
+                    <div class="deco-gem">2048</div>
                 </div>
+
                 <div class="start-menu">
-                    <div class="difficulty-select">
-                        <button class="diff-btn active" data-diff="easy">Facil</button>
-                        <button class="diff-btn" data-diff="medium">Medio</button>
-                        <button class="diff-btn" data-diff="hard">Dificil</button>
-                    </div>
+                    <p style="text-align:center; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 16px; line-height: 1.5;">
+                        Desliza las gemas para fusionarlas.<br>
+                        Cada fusion crea una gema mas rara.<br>
+                        Alcanza la <strong style="color: var(--accent);">Legendaria</strong>!
+                    </p>
                     <button id="btn-new-game" class="btn btn-primary">Nueva Partida</button>
                 </div>
+
                 <div class="high-score-display">
-                    <span>Mejor Tiempo:</span>
-                    <span id="high-score-value">--:--</span>
+                    <span>Mejor Puntaje:</span>
+                    <span id="high-score-value" style="font-weight:700;">0</span>
                 </div>
             </div>
         </div>
@@ -140,92 +144,89 @@
         <div id="game-screen" class="screen">
             <div class="game-title-bar">
                 <a href="../index.html" class="back-link" title="Volver al inicio">&larr;</a>
-                <span class="logo">Sudoku</span>
-                <span id="diff-badge" class="level-badge">FACIL</span>
+                <span class="logo">2048</span>
+                <span class="level-badge" style="background: rgba(179,136,255,0.2); color: #b388ff;">GEMAS</span>
             </div>
 
-            <header class="game-header glass-sm">
+            <header class="game-header glass-sm game-header-2048">
                 <div class="header-item">
-                    <span class="header-label">Dificultad</span>
-                    <span id="current-diff" class="header-value">Facil</span>
+                    <span class="header-label">Puntaje</span>
+                    <span id="current-score" class="header-value">0</span>
                 </div>
                 <div class="header-item">
-                    <span class="header-label">Tiempo</span>
-                    <span id="timer" class="header-value">00:00</span>
+                    <span class="header-label">Mejor</span>
+                    <span id="best-score" class="header-value">0</span>
                 </div>
                 <div class="header-item">
-                    <span class="header-label">Errores</span>
-                    <span id="error-count" class="header-value">0/3</span>
+                    <span class="header-label">Movimientos</span>
+                    <span id="move-count" class="header-value">0</span>
                 </div>
-                <div class="header-item">
-                    <span class="header-label">Pistas</span>
-                    <span id="hints-left" class="header-value">3</span>
+                <div class="header-item best-gem-display">
+                    <span class="header-label">Mejor Gema</span>
+                    <span id="best-gem" class="header-value">--</span>
                 </div>
             </header>
 
-            <!-- Sudoku Grid -->
-            <div id="sudoku-grid" class="sudoku-grid glass-sm">
-                <!-- 81 cells generated by JS -->
-            </div>
-
-            <!-- Numpad -->
-            <div class="numpad glass-sm">
-                <div class="numpad-row">
-                    <button class="numpad-btn" data-num="1">1</button>
-                    <button class="numpad-btn" data-num="2">2</button>
-                    <button class="numpad-btn" data-num="3">3</button>
-                    <button class="numpad-btn" data-num="4">4</button>
-                    <button class="numpad-btn" data-num="5">5</button>
-                    <button class="numpad-btn" data-num="6">6</button>
-                    <button class="numpad-btn" data-num="7">7</button>
-                    <button class="numpad-btn" data-num="8">8</button>
-                    <button class="numpad-btn" data-num="9">9</button>
-                </div>
-                <div class="numpad-row">
-                    <button id="btn-erase" class="numpad-btn numpad-btn-action" data-tooltip="Borrar">
-                        <i class="fa-solid fa-eraser"></i>
-                    </button>
-                    <button id="btn-hint" class="numpad-btn numpad-btn-action" data-tooltip="Pista">
-                        <i class="fa-solid fa-lightbulb"></i>
-                    </button>
-                    <button id="btn-notes-toggle" class="numpad-btn numpad-btn-action" data-tooltip="Notas">
-                        <i class="fa-solid fa-pencil"></i>
-                    </button>
-                </div>
+            <!-- 2048 Grid -->
+            <div id="grid-2048" class="board-2048 glass-sm">
+                <!-- 16 cells -->
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
+                <div class="cell-2048"></div>
             </div>
 
             <!-- Game controls -->
-            <div class="game-controls">
-                <button id="btn-new-ingame" class="btn btn-secondary btn-sm">Nuevo Juego</button>
-                <button id="btn-back-menu" class="btn btn-secondary btn-sm">Menu</button>
+            <div class="game-controls game-controls-2048">
+                <button id="btn-new-ingame" class="btn btn-secondary btn-sm">Nueva Partida</button>
+                <button id="btn-back-menu-ingame" class="btn btn-secondary btn-sm">Menu</button>
             </div>
 
             <!-- Footer -->
-            <div class="game-footer">SUDOKU</div>
+            <div class="game-footer">2048 GEMAS</div>
         </div>
 
         <!-- Win Overlay -->
         <div id="win-overlay" class="overlay glass-dark">
             <div class="overlay-content glass">
-                <h2>&#x1F389; Sudoku Completado!</h2>
+                <div class="gem-trophy">&#x1F48E;</div>
+                <h2>Gema Legendaria!</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 12px;">Alcanzaste la gema 2048!</p>
                 <div class="level-stats">
-                    <p>Tiempo: <span id="final-time">00:00</span></p>
-                    <p>Dificultad: <span id="final-diff">Facil</span></p>
-                    <p>Errores: <span id="final-errors">0</span></p>
-                    <p>Puntuacion: <span id="final-score">0</span></p>
+                    <p>Puntaje: <span id="final-score">0</span></p>
+                    <p>Movimientos: <span id="final-moves">0</span></p>
+                    <p>Mejor Gema: <span id="final-gem" style="text-transform:capitalize;">--</span></p>
                 </div>
-                <button id="btn-play-again" class="btn btn-primary">Jugar de Nuevo</button>
-                <button id="btn-back-menu-2" class="btn btn-secondary">Menu Principal</button>
+                <button id="btn-keep-playing" class="btn btn-primary">Seguir Jugando</button>
+                <button id="btn-play-again" class="btn btn-secondary">Jugar de Nuevo</button>
+                <button id="btn-back-menu-win" class="btn btn-secondary">Menu Principal</button>
             </div>
         </div>
 
         <!-- Game Over Overlay -->
         <div id="gameover-overlay" class="overlay glass-dark">
             <div class="overlay-content glass">
-                <h2>Game Over</h2>
-                <p style="margin-bottom:16px;">Demasiados errores. Intenta de nuevo!</p>
+                <h2>Sin Movimientos</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 12px;">No hay mas movimientos posibles.</p>
+                <div class="level-stats">
+                    <p>Puntaje: <span id="go-score">0</span></p>
+                    <p>Movimientos: <span id="go-moves">0</span></p>
+                    <p>Mejor Gema: <span id="go-gem" style="text-transform:capitalize;">--</span></p>
+                </div>
                 <button id="btn-retry" class="btn btn-primary">Reintentar</button>
-                <button id="btn-back-menu-3" class="btn btn-secondary">Menu Principal</button>
+                <button id="btn-back-menu-go" class="btn btn-secondary">Menu Principal</button>
             </div>
         </div>
 

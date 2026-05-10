@@ -10,7 +10,8 @@ const MiniShare = (() => {
     const THEMES = {
         match3:  { bg1: '#0a0a2e', bg2: '#1a0a3e', accent: '#ff6b35', icon: '\u{1F48E}' },
         memotest:{ bg1: '#0a1a2e', bg2: '#1a0a3e', accent: '#00d2ff', icon: '\u{1F0CF}' },
-        sudoku:  { bg1: '#0a1a0a', bg2: '#1a0a3e', accent: '#00c853', icon: '\u{1F9E9}' }
+        sudoku:  { bg1: '#0a1a0a', bg2: '#1a0a3e', accent: '#00c853', icon: '\u{1F9E9}' },
+        '2048':   { bg1: '#1a0a2e', bg2: '#0a0a1e', accent: '#b388ff', icon: '\u{1F48E}' }
     };
 
     const DIFF_LABELS = {
@@ -177,6 +178,17 @@ const MiniShare = (() => {
         };
     }
 
+    function build2048Data(score, moves, bestGem, isWin) {
+        return {
+            title: isWin ? '2048 - Gema Legendaria!' : '2048 Gemas',
+            stats: [
+                { label: 'Movimientos', value: moves },
+                { label: 'Mejor Gema', value: bestGem || '--' }
+            ],
+            score
+        };
+    }
+
     // ── Crea botones de share y los inserta en el overlay ──
     function createShareButtons(game, data) {
         const container = document.createElement('div');
@@ -300,7 +312,8 @@ const MiniShare = (() => {
         buildMatch3Data,
         buildMatch3GameOverData,
         buildMemotestData,
-        buildSudokuData
+        buildSudokuData,
+        build2048Data
     };
 
 })();

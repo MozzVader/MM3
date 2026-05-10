@@ -1,0 +1,214 @@
+/* ── 2048 Gemas — Estilos ── */
+
+/* Board */
+.board-2048 {
+    position: relative;
+    width: min(380px, calc(100vw - 48px));
+    aspect-ratio: 1;
+    background: rgba(26, 26, 31, 0.5);
+    border-radius: 16px;
+    padding: 10px;
+    margin: 16px auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 8px;
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Individual cell */
+.cell-2048 {
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background 0.15s ease, box-shadow 0.15s ease;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* Tile value (number) */
+.tile-value {
+    font-weight: 800;
+    font-size: clamp(1.4rem, 6vw, 2.2rem);
+    line-height: 1;
+    color: inherit;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Gem name label */
+.tile-name {
+    font-size: clamp(0.5rem, 2vw, 0.65rem);
+    font-weight: 500;
+    opacity: 0.7;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* ── Gem color overrides ── */
+.tile-2 { background: rgba(168,216,234,0.12); color: #a8d8ea; }
+.tile-4 { background: rgba(244,196,48,0.15); color: #f4c430; box-shadow: 0 0 6px rgba(244,196,48,0.25); }
+.tile-8 { background: rgba(255,140,0,0.18); color: #ff8c00; box-shadow: 0 0 10px rgba(255,140,0,0.25); }
+.tile-16 { background: rgba(233,69,96,0.2); color: #e94560; box-shadow: 0 0 12px rgba(233,69,96,0.3); }
+.tile-32 { background: rgba(0,200,83,0.2); color: #00c853; box-shadow: 0 0 14px rgba(0,200,83,0.3); }
+.tile-64 { background: rgba(66,165,245,0.22); color: #42a5f5; box-shadow: 0 0 16px rgba(66,165,245,0.3); }
+
+.tile-128 { background: rgba(179,136,255,0.22); color: #b388ff; box-shadow: 0 0 20px rgba(179,136,255,0.35); }
+.tile-128 .tile-value { font-size: clamp(1.2rem, 5.5vw, 1.9rem); }
+
+.tile-256 { background: rgba(224,247,250,0.18); color: #e0f7fa; box-shadow: 0 0 24px rgba(224,247,250,0.35); }
+.tile-256 .tile-value { font-size: clamp(1.2rem, 5.5vw, 1.9rem); }
+
+.tile-512 { background: rgba(255,110,199,0.2); color: #ff6ec7; box-shadow: 0 0 28px rgba(255,110,199,0.35); }
+.tile-512 .tile-value { font-size: clamp(1.1rem, 5vw, 1.8rem); }
+
+.tile-1024 { background: rgba(255,215,0,0.2); color: #ffd700; box-shadow: 0 0 32px rgba(255,215,0,0.35); }
+.tile-1024 .tile-value { font-size: clamp(1rem, 4.5vw, 1.5rem); }
+
+.tile-2048 {
+    background: rgba(255,107,53,0.28) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 40px rgba(255,107,53,0.5), 0 0 80px rgba(255,107,53,0.2) !important;
+    animation: legendaryPulse 2s ease-in-out infinite;
+}
+.tile-2048 .tile-value { font-size: clamp(1rem, 4.5vw, 1.5rem); }
+
+/* Super gems (beyond 2048) */
+.tile-super {
+    background: rgba(255,64,129,0.25) !important;
+    color: #ff4081 !important;
+    box-shadow: 0 0 40px rgba(255,64,129,0.5), 0 0 80px rgba(255,64,129,0.2) !important;
+    animation: legendaryPulse 1.5s ease-in-out infinite;
+}
+.tile-super .tile-value { font-size: clamp(0.85rem, 4vw, 1.3rem); }
+
+/* ── Animations ── */
+@keyframes tileNew {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes tileMerge {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes legendaryPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.15); }
+}
+
+.tile-new {
+    animation: tileNew 200ms ease-out;
+}
+
+.tile-merged {
+    animation: tileMerge 200ms ease-out;
+    z-index: 2;
+}
+
+/* ── Start screen decorations ── */
+.start-decorations-2048 {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 16px 0;
+    flex-wrap: wrap;
+}
+
+.deco-gem {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+    animation: floatGem 3s ease-in-out infinite;
+}
+
+.deco-gem:nth-child(1) { background: rgba(168,216,234,0.15); color: #a8d8ea; animation-delay: 0s; }
+.deco-gem:nth-child(2) { background: rgba(244,196,48,0.2); color: #f4c430; animation-delay: 0.4s; }
+.deco-gem:nth-child(3) { background: rgba(233,69,96,0.25); color: #e94560; animation-delay: 0.8s; }
+.deco-gem:nth-child(4) { background: rgba(0,200,83,0.25); color: #00c853; animation-delay: 1.2s; }
+.deco-gem:nth-child(5) { background: rgba(179,136,255,0.25); color: #b388ff; animation-delay: 1.6s; }
+.deco-gem:nth-child(6) { background: rgba(255,215,0,0.25); color: #ffd700; animation-delay: 2s; }
+
+@keyframes floatGem {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+/* ── Game header ── */
+.game-header-2048 .header-item {
+    flex: 1;
+    text-align: center;
+}
+
+.game-header-2048 .header-value {
+    font-size: clamp(1rem, 4vw, 1.3rem);
+    font-weight: 700;
+}
+
+/* ── Game controls ── */
+.game-controls-2048 {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    justify-content: center;
+}
+
+/* ── Best gem display in header ── */
+.best-gem-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.best-gem-display .header-value {
+    font-size: clamp(0.65rem, 2.5vw, 0.8rem);
+    text-transform: capitalize;
+}
+
+/* ── Win overlay gem trophy ── */
+.gem-trophy {
+    font-size: 3rem;
+    margin-bottom: 8px;
+    animation: floatGem 2s ease-in-out infinite;
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+    .board-2048 {
+        width: calc(100vw - 40px);
+        padding: 8px;
+        gap: 6px;
+        border-radius: 12px;
+    }
+
+    .cell-2048 {
+        border-radius: 8px;
+    }
+
+    .tile-name {
+        font-size: 0.45rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .board-2048 {
+        padding: 6px;
+        gap: 5px;
+    }
+
+    .tile-name {
+        display: none;
+    }
+}
