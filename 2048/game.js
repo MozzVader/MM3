@@ -1,12 +1,13 @@
 /**
- * game.js — 2048 Gemas (Mini Arcade)
- * Logica del juego 2048 con skin de gemas.
+ * game.js — 2048 (Mini Arcade)
+ * Logica del juego 2048 con skins: Gemas y LED Retro Display.
  */
 const Game2048 = (() => {
 
     // ── Config ──
     const SIZE = 4;
 
+    // ── Gem Skin ──
     const GEMS = {
         2:    { name: 'Cuarzo',     color: '#a8d8ea', bg: 'rgba(168,216,234,0.12)',  glow: 'none' },
         4:    { name: 'Ambar',      color: '#f4c430', bg: 'rgba(244,196,48,0.15)',   glow: '0 0 6px rgba(244,196,48,0.3)' },
@@ -26,7 +27,130 @@ const Game2048 = (() => {
         8192:  { name: 'Mistica',    color: '#7c4dff', bg: 'rgba(124,77,255,0.25)',  glow: '0 0 40px rgba(124,77,255,0.5), 0 0 80px rgba(124,77,255,0.2)' }
     };
 
-    function getGem(val) { return GEMS[val] || SUPER_GEMS[val] || { name: val.toString(), color: '#ffffff', bg: 'rgba(255,255,255,0.1)', glow: '0 0 20px rgba(255,255,255,0.3)' }; }
+    // ── LED Skin ──
+    const LEDS = {
+        2:    { name: 'LO',    color: '#39ff14', bg: 'rgba(57,255,20,0.08)',   glow: '0 0 8px rgba(57,255,20,0.4), inset 0 0 6px rgba(57,255,20,0.1)' },
+        4:    { name: 'LO',    color: '#39ff14', bg: 'rgba(57,255,20,0.12)',   glow: '0 0 12px rgba(57,255,20,0.5), inset 0 0 8px rgba(57,255,20,0.15)' },
+        8:    { name: 'MED',   color: '#00ff88', bg: 'rgba(0,255,136,0.1)',    glow: '0 0 14px rgba(0,255,136,0.45), inset 0 0 8px rgba(0,255,136,0.12)' },
+        16:   { name: 'MED',   color: '#00e5ff', bg: 'rgba(0,229,255,0.1)',    glow: '0 0 16px rgba(0,229,255,0.45), inset 0 0 10px rgba(0,229,255,0.12)' },
+        32:   { name: 'MED',   color: '#ffab00', bg: 'rgba(255,171,0,0.12)',   glow: '0 0 18px rgba(255,171,0,0.5), inset 0 0 10px rgba(255,171,0,0.15)' },
+        64:   { name: 'HI',    color: '#ff6d00', bg: 'rgba(255,109,0,0.14)',   glow: '0 0 20px rgba(255,109,0,0.5), inset 0 0 12px rgba(255,109,0,0.15)' },
+        128:  { name: 'HI',    color: '#ff1744', bg: 'rgba(255,23,68,0.15)',   glow: '0 0 24px rgba(255,23,68,0.55), inset 0 0 14px rgba(255,23,68,0.18)' },
+        256:  { name: 'HI',    color: '#ff4081', bg: 'rgba(255,64,129,0.15)',  glow: '0 0 28px rgba(255,64,129,0.55), inset 0 0 14px rgba(255,64,129,0.18)' },
+        512:  { name: 'MAX',   color: '#d500f9', bg: 'rgba(213,0,249,0.15)',   glow: '0 0 30px rgba(213,0,249,0.55), inset 0 0 16px rgba(213,0,249,0.18)' },
+        1024: { name: 'MAX',   color: '#ffea00', bg: 'rgba(255,234,0,0.12)',   glow: '0 0 34px rgba(255,234,0,0.5), inset 0 0 16px rgba(255,234,0,0.15)' },
+        2048: { name: 'JACKPOT', color: '#ffffff', bg: 'rgba(255,107,53,0.2)', glow: '0 0 40px rgba(255,107,53,0.7), 0 0 80px rgba(255,107,53,0.3), inset 0 0 20px rgba(255,107,53,0.2)' }
+    };
+
+    const SUPER_LEDS = {
+        4096:  { name: 'JACKPOT', color: '#ff4081', bg: 'rgba(255,64,129,0.2)', glow: '0 0 40px rgba(255,64,129,0.6), 0 0 80px rgba(255,64,129,0.25), inset 0 0 20px rgba(255,64,129,0.2)' },
+        8192:  { name: 'JACKPOT', color: '#7c4dff', bg: 'rgba(124,77,255,0.2)', glow: '0 0 40px rgba(124,77,255,0.6), 0 0 80px rgba(124,77,255,0.25), inset 0 0 20px rgba(124,77,255,0.2)' }
+    };
+
+    // ── Tile lookup ──
+    function getTile(val) {
+        if (currentSkin === 'led') {
+            return LEDS[val] || SUPER_LEDS[val] || { name: val.toString(), color: '#ffffff', bg: 'rgba(255,255,255,0.08)', glow: '0 0 20px rgba(255,255,255,0.3)' };
+        }
+        return GEMS[val] || SUPER_GEMS[val] || { name: val.toString(), color: '#ffffff', bg: 'rgba(255,255,255,0.1)', glow: '0 0 20px rgba(255,255,255,0.3)' };
+    }
+
+    // ── Skin Management ──
+    const LS_SKIN = '2048_skin';
+    let currentSkin = 'gems'; // 'gems' | 'led'
+
+    function loadSkin() {
+        currentSkin = localStorage.getItem(LS_SKIN) || 'gems';
+    }
+
+    function setSkin(skin) {
+        currentSkin = skin;
+        localStorage.setItem(LS_SKIN, skin);
+        applySkinToUI();
+
+        // Re-render board if in game
+        if (grid) render();
+    }
+
+    function toggleSkin() {
+        setSkin(currentSkin === 'gems' ? 'led' : 'gems');
+    }
+
+    function applySkinToUI() {
+        const isLED = currentSkin === 'led';
+
+        // Start screen button
+        const skinNameEl = document.getElementById('active-skin-name');
+        if (skinNameEl) skinNameEl.textContent = isLED ? 'LED Retro' : 'Gemas';
+
+        // Start screen subtitle
+        const subtitleEl = document.getElementById('game-subtitle-text');
+        if (subtitleEl) subtitleEl.textContent = isLED ? 'Display Retro' : 'Fusion de Gemas';
+
+        // Start screen decorations
+        const decosEl = document.getElementById('start-decorations');
+        if (decosEl) {
+            if (isLED) {
+                decosEl.className = 'start-decorations-2048 led-decorations';
+                decosEl.innerHTML = `
+                    <div class="deco-led" style="--led-c:#39ff14">2</div>
+                    <div class="deco-led" style="--led-c:#00ff88">8</div>
+                    <div class="deco-led" style="--led-c:#ffab00">32</div>
+                    <div class="deco-led" style="--led-c:#ff1744">128</div>
+                    <div class="deco-led" style="--led-c:#d500f9">512</div>
+                    <div class="deco-led" style="--led-c:#ffffff">2048</div>
+                `;
+            } else {
+                decosEl.className = 'start-decorations-2048';
+                decosEl.innerHTML = `
+                    <div class="deco-gem">2</div>
+                    <div class="deco-gem">4</div>
+                    <div class="deco-gem">16</div>
+                    <div class="deco-gem">64</div>
+                    <div class="deco-gem">128</div>
+                    <div class="deco-gem">2048</div>
+                `;
+            }
+        }
+
+        // Game screen badge
+        const badgeEl = document.getElementById('skin-badge');
+        if (badgeEl) {
+            if (isLED) {
+                badgeEl.textContent = 'LED';
+                badgeEl.style.background = 'rgba(57,255,20,0.15)';
+                badgeEl.style.color = '#39ff14';
+                badgeEl.style.borderColor = 'rgba(57,255,20,0.25)';
+            } else {
+                badgeEl.textContent = 'GEMAS';
+                badgeEl.style.background = 'rgba(179,136,255,0.2)';
+                badgeEl.style.color = '#b388ff';
+                badgeEl.style.borderColor = 'rgba(179,136,255,0.2)';
+            }
+        }
+
+        // Game footer
+        const footerEl = document.getElementById('game-footer-text');
+        if (footerEl) footerEl.textContent = isLED ? '2048 LED' : '2048 GEMAS';
+
+        // Board class
+        const boardEl = document.getElementById('grid-2048');
+        if (boardEl) {
+            boardEl.classList.toggle('led-board', isLED);
+        }
+
+        // Header label
+        const headerLabel = document.querySelector('.best-gem-display .header-label');
+        if (headerLabel) headerLabel.textContent = isLED ? 'Nivel' : 'Mejor Gema';
+
+        // Win overlay text
+        const trophyEl = document.querySelector('.gem-trophy');
+        if (trophyEl) trophyEl.innerHTML = isLED ? '&#x1F3B0;' : '&#x1F48E;';
+        const winTitle = document.querySelector('#win-overlay h2');
+        if (winTitle) winTitle.textContent = isLED ? 'Jackpot!' : 'Gema Legendaria!';
+        const winDesc = document.querySelector('#win-overlay .overlay-content > p');
+        if (winDesc) winDesc.textContent = isLED ? 'Llegaste a 2048 en el display!' : 'Alcanzaste la gema 2048!';
+    }
 
     // ── State ──
     let grid, score, bestScore, gameActive, won, keepPlaying, moveCount;
@@ -50,6 +174,13 @@ const Game2048 = (() => {
         // Show best score on start screen too
         const hsEl = document.getElementById('high-score-value');
         if (hsEl) hsEl.textContent = bestScore.toLocaleString('es-AR');
+
+        // Load and apply skin
+        loadSkin();
+        applySkinToUI();
+
+        // Skin toggle button
+        document.getElementById('btn-select-skin').addEventListener('click', toggleSkin);
 
         // Start screen
         document.getElementById('btn-new-game').addEventListener('click', newGame);
@@ -141,14 +272,12 @@ const Game2048 = (() => {
             setLine(grid, dir, i, result.row);
             mergeScore += result.score;
 
-            // Track merged positions (convert line index → grid coords)
             result.mergedCols.forEach(col => {
                 const pos = lineToGrid(dir, i, col);
                 mergedTiles.push(`${pos.r}-${pos.c}`);
             });
         }
 
-        // Check if anything actually moved
         let moved = false;
         for (let r = 0; r < SIZE; r++)
             for (let c = 0; c < SIZE; c++)
@@ -160,17 +289,17 @@ const Game2048 = (() => {
         moveCount++;
         spawnTile();
 
-        // Track best gem
+        // Track best gem / tile
         for (let r = 0; r < SIZE; r++) {
             for (let c = 0; c < SIZE; c++) {
                 if (grid[r][c] > bestGemValue) {
                     bestGemValue = grid[r][c];
-                    bestGem = getGem(grid[r][c]).name;
+                    const tile = getTile(grid[r][c]);
+                    bestGem = tile.name;
                 }
             }
         }
 
-        // Best score
         if (score > bestScore) {
             bestScore = score;
             localStorage.setItem('2048_best', bestScore.toString());
@@ -179,7 +308,6 @@ const Game2048 = (() => {
         render();
         updateUI();
 
-        // Win check (only first time)
         if (!won && !keepPlaying) {
             for (let r = 0; r < SIZE; r++)
                 for (let c = 0; c < SIZE; c++)
@@ -191,7 +319,6 @@ const Game2048 = (() => {
                     }
         }
 
-        // Game over check
         if (isGameOver()) {
             gameActive = false;
             setTimeout(() => showGameOverOverlay(), 350);
@@ -199,7 +326,6 @@ const Game2048 = (() => {
     }
 
     function processRow(row) {
-        // Remove zeros (slide)
         let filtered = row.filter(v => v !== 0);
         let result = [];
         let sc = 0;
@@ -219,9 +345,7 @@ const Game2048 = (() => {
             }
         }
 
-        // Pad with zeros
         while (result.length < SIZE) result.push(0);
-
         return { row: result, score: sc, mergedCols };
     }
 
@@ -259,12 +383,10 @@ const Game2048 = (() => {
 
     // ── Game over detection ──
     function isGameOver() {
-        // Any empty cell?
         for (let r = 0; r < SIZE; r++)
             for (let c = 0; c < SIZE; c++)
                 if (grid[r][c] === 0) return false;
 
-        // Any adjacent equal cells?
         for (let r = 0; r < SIZE; r++) {
             for (let c = 0; c < SIZE; c++) {
                 const val = grid[r][c];
@@ -272,13 +394,14 @@ const Game2048 = (() => {
                 if (r < SIZE - 1 && grid[r + 1][c] === val) return false;
             }
         }
-
         return true;
     }
 
     // ── Render ──
     function render() {
+        const isLED = currentSkin === 'led';
         const cells = gridEl.children;
+
         for (let r = 0; r < SIZE; r++) {
             for (let c = 0; c < SIZE; c++) {
                 const cell = cells[r * SIZE + c];
@@ -286,42 +409,59 @@ const Game2048 = (() => {
                 const key = `${r}-${c}`;
 
                 // Reset
-                cell.className = 'cell-2048';
+                cell.className = 'cell-2048' + (isLED ? ' led-cell' : '');
                 cell.style.cssText = '';
                 cell.innerHTML = '';
 
-                if (val === 0) {
-                    continue;
+                if (val === 0) continue;
+
+                const tile = getTile(val);
+
+                // Gem classes (for color fallback in CSS)
+                if (!isLED) {
+                    cell.classList.add(`tile-${Math.min(val, 2048)}`);
+                    if (val > 2048) cell.classList.add('tile-super');
                 }
 
-                const gem = getGem(val);
-                cell.classList.add(`tile-${Math.min(val, 2048)}`);
-                if (val > 2048) cell.classList.add('tile-super');
+                // LED classes
+                if (isLED) {
+                    cell.classList.add('led-active');
+                    const tier = getLedTier(val);
+                    if (tier) cell.classList.add(`led-${tier}`);
+                    if (val >= 2048) cell.classList.add('led-jackpot');
+                }
 
                 // Animation classes
-                if (newTiles.includes(key)) cell.classList.add('tile-new');
-                if (mergedTiles.includes(key)) cell.classList.add('tile-merged');
+                if (newTiles.includes(key)) cell.classList.add(isLED ? 'led-flicker' : 'tile-new');
+                if (mergedTiles.includes(key)) cell.classList.add(isLED ? 'led-burst' : 'tile-merged');
 
-                // Apply gem styles
-                cell.style.background = gem.bg;
-                cell.style.color = gem.color;
-                cell.style.boxShadow = gem.glow !== 'none' ? gem.glow : '';
+                // Apply styles
+                cell.style.background = tile.bg;
+                cell.style.color = tile.color;
+                cell.style.boxShadow = tile.glow || '';
 
                 // Content
                 const numSpan = document.createElement('span');
-                numSpan.className = 'tile-value';
+                numSpan.className = isLED ? 'led-value' : 'tile-value';
                 numSpan.textContent = val;
                 cell.appendChild(numSpan);
 
-                // Gem name (show for 128+ or super gems)
+                // Label (gem name or LED tier) — show for 128+
                 if (val >= 128) {
-                    const gemName = document.createElement('span');
-                    gemName.className = 'tile-name';
-                    gemName.textContent = gem.name;
-                    cell.appendChild(gemName);
+                    const label = document.createElement('span');
+                    label.className = isLED ? 'led-label' : 'tile-name';
+                    label.textContent = tile.name;
+                    cell.appendChild(label);
                 }
             }
         }
+    }
+
+    function getLedTier(val) {
+        if (val <= 4) return 'lo';
+        if (val <= 32) return 'med';
+        if (val <= 128) return 'hi';
+        return 'max';
     }
 
     // ── UI Updates ──
@@ -337,12 +477,10 @@ const Game2048 = (() => {
         const overlay = document.getElementById('win-overlay');
         overlay.classList.add('active');
 
-        // Fill stats
         document.getElementById('final-score').textContent = score.toLocaleString('es-AR');
         document.getElementById('final-moves').textContent = moveCount;
         document.getElementById('final-gem').textContent = bestGem;
 
-        // Share
         if (typeof MiniShare !== 'undefined') {
             const el = overlay.querySelector('.overlay-content');
             MiniShare.inject(el, '2048', MiniShare.build2048Data(score, moveCount, bestGem, true));
@@ -357,7 +495,6 @@ const Game2048 = (() => {
         document.getElementById('go-moves').textContent = moveCount;
         document.getElementById('go-gem').textContent = bestGem;
 
-        // Share
         if (typeof MiniShare !== 'undefined') {
             const el = overlay.querySelector('.overlay-content');
             MiniShare.inject(el, '2048', MiniShare.build2048Data(score, moveCount, bestGem, false));
@@ -372,8 +509,7 @@ const Game2048 = (() => {
     function showScreen(name) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(`${name}-screen`).classList.add('active');
-        
-        // Update start screen best score when going back to menu
+
         if (name === 'start') {
             const hsEl = document.getElementById('high-score-value');
             if (hsEl) hsEl.textContent = bestScore.toLocaleString('es-AR');
@@ -422,5 +558,5 @@ const Game2048 = (() => {
     // ── Boot ──
     document.addEventListener('DOMContentLoaded', init);
 
-    return { getGem };
+    return { getGem: getTile, getSkin: () => currentSkin };
 })();

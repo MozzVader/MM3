@@ -509,3 +509,181 @@
         font-size: 0.55rem;
     }
 }
+
+/* ═══════════════════════════════════════════════
+   SKIN SELECTOR BUTTON
+   ═══════════════════════════════════════════════ */
+.skin-selector-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 10px 16px;
+    margin-bottom: 28px;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: color var(--transition-speed) ease, border-color var(--transition-speed) ease, background var(--transition-speed) ease;
+}
+
+.skin-selector-btn i.fa-display {
+    color: var(--gem-purple);
+    font-size: 0.95rem;
+}
+
+.skin-selector-btn strong {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.skin-selector-btn .chevron {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    transition: transform 0.2s ease;
+}
+
+.skin-selector-btn:hover {
+    color: var(--text-primary);
+    border-color: rgba(179, 136, 255, 0.3);
+}
+
+.skin-selector-btn:hover .chevron {
+    transform: translateX(3px);
+}
+
+/* ═══════════════════════════════════════════════
+   LED RETRO DISPLAY SKIN
+   ═══════════════════════════════════════════════ */
+
+/* --- LED Decorations (start screen) --- */
+.led-decorations .deco-led {
+    width: 40px;
+    height: 40px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+    color: var(--led-c, #39ff14);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    animation: floatGem 3s ease-in-out infinite;
+    text-shadow: 0 0 8px var(--led-c, #39ff14), 0 0 16px var(--led-c, #39ff14);
+}
+
+.led-decorations .deco-led:nth-child(1) { animation-delay: 0s; }
+.led-decorations .deco-led:nth-child(2) { animation-delay: 0.4s; }
+.led-decorations .deco-led:nth-child(3) { animation-delay: 0.8s; }
+.led-decorations .deco-led:nth-child(4) { animation-delay: 1.2s; }
+.led-decorations .deco-led:nth-child(5) { animation-delay: 1.6s; }
+.led-decorations .deco-led:nth-child(6) { animation-delay: 2s; }
+
+/* --- LED Board --- */
+.led-board {
+    background: rgba(8, 10, 14, 0.7) !important;
+    border: 2px solid rgba(57, 255, 20, 0.12);
+    box-shadow:
+        inset 0 0 40px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(57, 255, 20, 0.06),
+        inset 0 0 2px rgba(57, 255, 20, 0.08);
+}
+
+/* --- LED Cells --- */
+.led-cell {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+}
+
+.led-cell.led-active {
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* --- LED Value (monospace 7-segment look) --- */
+.led-value {
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-weight: 900;
+    font-size: clamp(1.4rem, 6vw, 2.2rem);
+    line-height: 1;
+    color: inherit;
+    text-shadow:
+        0 0 6px currentColor,
+        0 0 12px currentColor,
+        0 0 20px currentColor;
+    letter-spacing: 1px;
+}
+
+/* LED font size tiers for larger numbers */
+.led-cell.led-hi .led-value { font-size: clamp(1.2rem, 5.5vw, 1.9rem); }
+.led-cell.led-max .led-value { font-size: clamp(1rem, 4.5vw, 1.5rem); }
+.led-cell.led-jackpot .led-value { font-size: clamp(0.9rem, 4vw, 1.4rem); }
+
+/* --- LED Label --- */
+.led-label {
+    font-family: 'Courier New', 'Consolas', monospace;
+    font-size: clamp(0.45rem, 1.8vw, 0.6rem);
+    font-weight: 700;
+    opacity: 0.6;
+    margin-top: 2px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 0 0 4px currentColor;
+}
+
+/* --- LED Jackpot (2048) --- */
+.led-cell.led-jackpot {
+    animation: jackpotPulse 1.5s ease-in-out infinite;
+}
+
+.led-cell.led-jackpot .led-value {
+    text-shadow:
+        0 0 8px currentColor,
+        0 0 16px currentColor,
+        0 0 30px currentColor,
+        0 0 50px currentColor;
+}
+
+@keyframes jackpotPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
+}
+
+/* --- LED Animations --- */
+@keyframes ledFlicker {
+    0% { opacity: 0; transform: scale(0.8); }
+    20% { opacity: 0.4; }
+    40% { opacity: 0.1; }
+    60% { opacity: 0.8; }
+    80% { opacity: 0.3; }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes ledBurst {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.15); filter: brightness(1.5); }
+    100% { transform: scale(1); filter: brightness(1); }
+}
+
+.led-flicker {
+    animation: ledFlicker 200ms ease-out;
+}
+
+.led-burst {
+    animation: ledBurst 250ms ease-out;
+    z-index: 2;
+}
+
+/* --- LED Header --- */
+.led-board ~ .game-controls .btn-secondary {
+    border-color: rgba(57, 255, 20, 0.15);
+}
+
+.led-board ~ .game-controls .btn-secondary:hover {
+    border-color: rgba(57, 255, 20, 0.35);
+    color: #39ff14;
+    background: rgba(57, 255, 20, 0.06);
+}

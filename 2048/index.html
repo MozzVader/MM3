@@ -113,9 +113,16 @@
         <div id="start-screen" class="screen active">
             <div class="start-content glass">
                 <h1 class="game-title">2048</h1>
-                <p class="game-subtitle">Fusion de Gemas</p>
+                <p class="game-subtitle" id="game-subtitle-text">Fusion de Gemas</p>
 
-                <div class="start-decorations-2048">
+                <!-- Skin selector -->
+                <button id="btn-select-skin" class="skin-selector-btn glass-sm">
+                    <i class="fa-solid fa-display"></i>
+                    <span>Skin: <strong id="active-skin-name">Gemas</strong></span>
+                    <i class="fa-solid fa-chevron-right chevron"></i>
+                </button>
+
+                <div class="start-decorations-2048" id="start-decorations">
                     <div class="deco-gem">2</div>
                     <div class="deco-gem">4</div>
                     <div class="deco-gem">16</div>
@@ -145,7 +152,7 @@
             <div class="game-title-bar">
                 <a href="../index.html" class="back-link" title="Volver al inicio">&larr;</a>
                 <span class="logo">2048</span>
-                <span class="level-badge" style="background: rgba(179,136,255,0.2); color: #b388ff;">GEMAS</span>
+                <span class="level-badge" id="skin-badge" style="background: rgba(179,136,255,0.2); color: #b388ff;">GEMAS</span>
             </div>
 
             <header class="game-header glass-sm game-header-2048">
@@ -195,7 +202,7 @@
             </div>
 
             <!-- Footer -->
-            <div class="game-footer">2048 GEMAS</div>
+            <div class="game-footer" id="game-footer-text">2048 GEMAS</div>
         </div>
 
         <!-- Win Overlay -->
