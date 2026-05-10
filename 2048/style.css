@@ -139,6 +139,7 @@
     max-width: 500px;
     margin: 0 auto 12px;
     padding: 0 4px;
+    overflow: visible;
 }
 
 .game-title-bar .logo {
@@ -151,6 +152,8 @@
     background-clip: text;
     flex-shrink: 0;
     white-space: nowrap;
+    min-width: fit-content;
+    overflow: visible;
 }
 
 .back-link {
