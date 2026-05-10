@@ -1,21 +1,229 @@
-/* ── 2048 Gemas — Estilos ── */
+/* ============================================
+   2048 Gemas - Estilos Especificos
+   ============================================ */
 
-/* Board */
-.board-2048 {
+/* --- Screen System --- */
+.screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - 60px);
+    padding: 20px;
+    padding-top: 70px;
+    animation: fadeIn 0.4s ease;
+}
+
+.screen.active {
+    display: flex;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- App Container --- */
+#app {
+    width: 100%;
+    max-width: 520px;
+    padding: 16px;
     position: relative;
+    z-index: 1;
+}
+
+#game-screen {
+    position: relative;
+}
+
+/* --- Start Screen --- */
+#start-screen {
+    min-height: 80vh;
+    justify-content: center;
+}
+
+.start-content {
+    text-align: center;
+    width: 100%;
+    max-width: 420px;
+    padding: 44px 32px;
+}
+
+.game-title {
+    font-size: 4.5rem;
+    font-weight: 900;
+    letter-spacing: -4px;
+    background: linear-gradient(135deg, var(--gem-purple) 0%, var(--accent) 50%, var(--gem-yellow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0;
+    line-height: 1;
+    filter: drop-shadow(0 4px 20px rgba(179, 136, 255, 0.3));
+}
+
+.game-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    margin-top: 8px;
+}
+
+/* --- Start Decorations --- */
+.start-decorations-2048 {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+}
+
+.deco-gem {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.9rem;
+    animation: floatGem 3s ease-in-out infinite;
+}
+
+.deco-gem:nth-child(1) { background: rgba(168,216,234,0.15); color: #a8d8ea; animation-delay: 0s; }
+.deco-gem:nth-child(2) { background: rgba(244,196,48,0.2); color: #f4c430; animation-delay: 0.4s; }
+.deco-gem:nth-child(3) { background: rgba(233,69,96,0.25); color: #e94560; animation-delay: 0.8s; }
+.deco-gem:nth-child(4) { background: rgba(0,200,83,0.25); color: #00c853; animation-delay: 1.2s; }
+.deco-gem:nth-child(5) { background: rgba(179,136,255,0.25); color: #b388ff; animation-delay: 1.6s; }
+.deco-gem:nth-child(6) { background: rgba(255,215,0,0.25); color: #ffd700; animation-delay: 2s; }
+
+@keyframes floatGem {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+/* --- Start Menu --- */
+.start-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+/* --- High Score --- */
+.high-score-display {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#high-score-value {
+    color: var(--gem-purple-light);
+    font-weight: 700;
+}
+
+/* --- Game Title Bar --- */
+.game-title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 0 4px;
+}
+
+.game-title-bar .logo {
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, var(--gem-purple), var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.back-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: color var(--transition-speed) ease, background var(--transition-speed) ease;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+.back-link:hover {
+    color: var(--accent);
+    background: rgba(255, 107, 53, 0.1);
+}
+
+.level-badge {
+    margin-left: auto;
+    padding: 4px 14px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: rgba(179, 136, 255, 0.12);
+    color: #b388ff;
+    border: 1px solid rgba(179, 136, 255, 0.2);
+}
+
+/* --- Game Header --- */
+.game-header {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    width: 100%;
+    margin-bottom: 14px;
+    padding: 14px 12px;
+}
+
+.header-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.header-label {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.header-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+/* --- Board --- */
+.board-2048 {
     width: min(380px, calc(100vw - 48px));
     aspect-ratio: 1;
     background: rgba(26, 26, 31, 0.5);
     border-radius: 16px;
     padding: 10px;
-    margin: 16px auto;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 8px;
     box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Individual cell */
+/* --- Cells --- */
 .cell-2048 {
     aspect-ratio: 1;
     border-radius: 10px;
@@ -30,7 +238,7 @@
     user-select: none;
 }
 
-/* Tile value (number) */
+/* --- Tile Value --- */
 .tile-value {
     font-weight: 800;
     font-size: clamp(1.4rem, 6vw, 2.2rem);
@@ -39,7 +247,7 @@
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-/* Gem name label */
+/* --- Gem Name Label --- */
 .tile-name {
     font-size: clamp(0.5rem, 2vw, 0.65rem);
     font-weight: 500;
@@ -49,7 +257,7 @@
     text-transform: uppercase;
 }
 
-/* ── Gem color overrides ── */
+/* ── Gem Color Overrides ── */
 .tile-2 { background: rgba(168,216,234,0.12); color: #a8d8ea; }
 .tile-4 { background: rgba(244,196,48,0.15); color: #f4c430; box-shadow: 0 0 6px rgba(244,196,48,0.25); }
 .tile-8 { background: rgba(255,140,0,0.18); color: #ff8c00; box-shadow: 0 0 10px rgba(255,140,0,0.25); }
@@ -113,84 +321,169 @@
     z-index: 2;
 }
 
-/* ── Start screen decorations ── */
-.start-decorations-2048 {
+/* --- Game Controls --- */
+.game-controls {
     display: flex;
     gap: 12px;
     justify-content: center;
     margin: 16px 0;
-    flex-wrap: wrap;
 }
 
-.deco-gem {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    font-size: 0.9rem;
-    animation: floatGem 3s ease-in-out infinite;
+.btn-sm {
+    padding: 8px 20px;
+    font-size: 0.8rem;
 }
 
-.deco-gem:nth-child(1) { background: rgba(168,216,234,0.15); color: #a8d8ea; animation-delay: 0s; }
-.deco-gem:nth-child(2) { background: rgba(244,196,48,0.2); color: #f4c430; animation-delay: 0.4s; }
-.deco-gem:nth-child(3) { background: rgba(233,69,96,0.25); color: #e94560; animation-delay: 0.8s; }
-.deco-gem:nth-child(4) { background: rgba(0,200,83,0.25); color: #00c853; animation-delay: 1.2s; }
-.deco-gem:nth-child(5) { background: rgba(179,136,255,0.25); color: #b388ff; animation-delay: 1.6s; }
-.deco-gem:nth-child(6) { background: rgba(255,215,0,0.25); color: #ffd700; animation-delay: 2s; }
-
-@keyframes floatGem {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
-}
-
-/* ── Game header ── */
-.game-header-2048 .header-item {
-    flex: 1;
-    text-align: center;
-}
-
-.game-header-2048 .header-value {
-    font-size: clamp(1rem, 4vw, 1.3rem);
-    font-weight: 700;
-}
-
-/* ── Game controls ── */
-.game-controls-2048 {
-    display: flex;
-    gap: 12px;
-    margin-top: 16px;
-    justify-content: center;
-}
-
-/* ── Best gem display in header ── */
-.best-gem-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
+/* --- Best Gem Display --- */
 .best-gem-display .header-value {
     font-size: clamp(0.65rem, 2.5vw, 0.8rem);
     text-transform: capitalize;
 }
 
-/* ── Win overlay gem trophy ── */
+/* --- Win Overlay Gem Trophy --- */
 .gem-trophy {
     font-size: 3rem;
     margin-bottom: 8px;
     animation: floatGem 2s ease-in-out infinite;
 }
 
-/* ── Responsive ── */
-@media (max-width: 480px) {
+/* --- Overlays --- */
+.overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.overlay.active {
+    display: flex;
+}
+
+.overlay-content {
+    padding: 44px 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 92%;
+    animation: slideInUp 0.3s ease;
+}
+
+.overlay-content h2 {
+    font-size: 1.7rem;
+    margin-bottom: 24px;
+}
+
+.overlay-content .level-stats {
+    margin-bottom: 28px;
+}
+
+.overlay-content .level-stats p {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 8px 0;
+}
+
+.overlay-content .level-stats p span {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.overlay-content .btn {
+    margin: 6px auto;
+    display: block;
+    width: 100%;
+    max-width: 260px;
+}
+
+@keyframes slideInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Footer --- */
+.game-footer {
+    text-align: center;
+    padding: 16px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 4px;
+}
+
+.site-footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.site-footer .footer-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-speed);
+}
+
+.site-footer .footer-links a:hover {
+    color: var(--accent);
+}
+
+/* --- Responsive --- */
+@media (max-width: 520px) {
+    #app {
+        padding: 8px;
+    }
+
+    .start-content {
+        padding: 32px 20px;
+    }
+
+    .game-title {
+        font-size: 3.5rem;
+        letter-spacing: -3px;
+    }
+
     .board-2048 {
-        width: calc(100vw - 40px);
+        width: min(380px, calc(100vw - 40px));
         padding: 8px;
         gap: 6px;
         border-radius: 12px;
+    }
+
+    .game-title-bar .logo {
+        font-size: 1.3rem;
+    }
+
+    .game-header {
+        padding: 10px 8px;
+    }
+
+    .header-value {
+        font-size: 1.1rem;
+    }
+
+    .overlay-content {
+        padding: 32px 24px;
+    }
+
+    .overlay-content h2 {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 380px) {
+    .game-title {
+        font-size: 2.8rem;
+        letter-spacing: -2px;
+    }
+
+    .board-2048 {
+        padding: 6px;
+        gap: 5px;
     }
 
     .cell-2048 {
@@ -198,17 +491,14 @@
     }
 
     .tile-name {
-        font-size: 0.45rem;
-    }
-}
-
-@media (max-width: 360px) {
-    .board-2048 {
-        padding: 6px;
-        gap: 5px;
-    }
-
-    .tile-name {
         display: none;
+    }
+
+    .header-value {
+        font-size: 1rem;
+    }
+
+    .header-label {
+        font-size: 0.55rem;
     }
 }

@@ -288,9 +288,9 @@ const Game2048 = (() => {
                 // Reset
                 cell.className = 'cell-2048';
                 cell.style.cssText = '';
+                cell.innerHTML = '';
 
                 if (val === 0) {
-                    cell.innerHTML = '';
                     continue;
                 }
 
