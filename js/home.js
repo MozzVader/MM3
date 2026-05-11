@@ -496,10 +496,12 @@
             const match3Scores = scores.filter(s => s.game_slug === 'match3');
             const memotestScores = scores.filter(s => s.game_slug === 'memotest');
             const sudokuScores = scores.filter(s => s.game_slug === 'sudoku');
+            const scores2048 = scores.filter(s => s.game_slug === '2048');
 
             let bestMatch3 = 0;
             let bestMemotest = null;
             let bestSudoku = 0;
+            let best2048 = 0;
             let totalScore = 0;
             const topScores = [];
 
@@ -522,6 +524,11 @@
                 if (s.score > bestSudoku) bestSudoku = s.score;
             });
 
+            scores2048.forEach(s => {
+                totalScore += s.score;
+                if (s.score > best2048) best2048 = s.score;
+            });
+
             // Collect top 4 overall scores for "Best Moments"
             const allWithMeta = scores.map(s => ({
                 game: s.game_slug,
@@ -539,10 +546,12 @@
                 bestMatch3,
                 bestMemotest: bestMemotest ? Math.round(bestMemotest) : null,
                 bestSudoku,
+                best2048,
                 topScores,
                 match3Count: match3Scores.length,
                 memotestCount: memotestScores.length,
                 sudokuCount: sudokuScores.length,
+                scores2048Count: scores2048.length,
             };
         },
 
@@ -591,11 +600,13 @@
             const bestMatch3El = document.querySelector('[data-stat="bestMatch3"]');
             const bestMemotestEl = document.querySelector('[data-stat="bestMemotest"]');
             const bestSudokuEl = document.querySelector('[data-stat="bestSudoku"]');
+        const best2048El = document.querySelector('[data-stat="best2048"]');
             if (totalGamesEl) totalGamesEl.textContent = '0';
             if (totalScoreEl) totalScoreEl.textContent = '0';
             if (bestMatch3El) bestMatch3El.textContent = '--';
             if (bestMemotestEl) bestMemotestEl.textContent = '--';
             if (bestSudokuEl) bestSudokuEl.textContent = '--';
+            if (best2048El) best2048El.textContent = '--';
             return;
         }
 
@@ -605,6 +616,7 @@
         const bestMatch3El = document.querySelector('[data-stat="bestMatch3"]');
         const bestMemotestEl = document.querySelector('[data-stat="bestMemotest"]');
         const bestSudokuEl = document.querySelector('[data-stat="bestSudoku"]');
+        const best2048El = document.querySelector('[data-stat="best2048"]');
 
         if (totalGamesEl) countUp(totalGamesEl, stats.totalGames, 600);
         if (totalScoreEl) countUp(totalScoreEl, stats.totalScore, 1000);
@@ -623,6 +635,13 @@
                 bestSudokuEl.textContent = '--';
             }
         }
+        if (best2048El) {
+            if (stats.best2048) {
+                countUp(best2048El, stats.best2048, 800);
+            } else {
+                best2048El.textContent = '--';
+            }
+        }
 
         // Best moments
         const momentsSection = $('#best-moments');
@@ -630,8 +649,8 @@
         if (momentsSection && momentsList && stats.topScores.length > 0) {
             momentsSection.style.display = 'block';
             momentsList.innerHTML = stats.topScores.map(s => {
-                const gameNames = { match3: 'Match 3', memotest: 'Memotest', sudoku: 'Sudoku' };
-                const gameIcons = { match3: '&#x1F48E;', memotest: '&#x1F0CF;', sudoku: '&#x1F9E9;' };
+                const gameNames = { match3: 'Match 3', memotest: 'Memotest', sudoku: 'Sudoku', '2048': '2048' };
+                const gameIcons = { match3: '&#x1F48E;', memotest: '&#x1F0CF;', sudoku: '&#x1F9E9;', '2048': '&#x1F3AE;' };
                 const gameName = gameNames[s.game] || s.game;
                 const gameIcon = gameIcons[s.game] || '&#x1F3AE;';
                 const scoreDisplay = s.game === 'memotest' && s.metadata?.time
@@ -640,6 +659,8 @@
                 const metaParts = [];
                 if (s.level) metaParts.push(`Nivel ${s.level}`);
                 if (s.metadata?.difficulty) metaParts.push(capitalize(s.metadata.difficulty));
+                if (s.metadata?.best_tile_name) metaParts.push(s.metadata.best_tile_name);
+                if (s.metadata?.reason === 'win') metaParts.push('Victoria');
                 if (s.metadata?.time && s.game !== 'memotest') {
                     metaParts.push(formatTime(s.metadata.time));
                 }

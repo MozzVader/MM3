@@ -472,6 +472,40 @@ const Game2048 = (() => {
         if (bestGemEl) bestGemEl.textContent = bestGem || '--';
     }
 
+    // ── Supabase Scoring ──
+    async function saveScoreToSupabase(reason) {
+        try {
+            if (typeof sb === 'undefined' || !sb) return;
+            const { data: { session } } = await sb.auth.getSession();
+            if (!session?.user) return;
+
+            const payload = {
+                user_id: session.user.id,
+                game_slug: '2048',
+                score: Number(score),
+                level: null,
+                metadata: {
+                    reason,                    // 'win' | 'game_over'
+                    moves: moveCount,
+                    best_tile: bestGemValue,
+                    best_tile_name: bestGem,
+                    skin: currentSkin,
+                },
+            };
+
+            console.log('[2048] Saving score payload:', JSON.stringify(payload));
+            const { data, error } = await sb.from('game_scores').insert(payload);
+
+            if (error) {
+                console.error('[2048] Supabase insert FAILED:', error.code, error.message, error.details);
+            } else {
+                console.log('[2048] Score saved to Supabase:', data);
+            }
+        } catch (e) {
+            console.error('[2048] Exception saving score:', e);
+        }
+    }
+
     // ── Overlays ──
     function showWinOverlay() {
         const overlay = document.getElementById('win-overlay');
@@ -485,6 +519,8 @@ const Game2048 = (() => {
             const el = overlay.querySelector('.overlay-content');
             MiniShare.inject(el, '2048', MiniShare.build2048Data(score, moveCount, bestGem, true));
         }
+
+        saveScoreToSupabase('win');
     }
 
     function showGameOverOverlay() {
@@ -499,6 +535,8 @@ const Game2048 = (() => {
             const el = overlay.querySelector('.overlay-content');
             MiniShare.inject(el, '2048', MiniShare.build2048Data(score, moveCount, bestGem, false));
         }
+
+        saveScoreToSupabase('game_over');
     }
 
     function hideOverlay(id) {
