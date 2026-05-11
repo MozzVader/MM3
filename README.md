@@ -60,6 +60,19 @@ El clasico puzzle numerico. Completa la grilla 9x9 sin repetir numeros en filas,
 | Scoring | Base por dificultad - penalizacion de tiempo, errores y pistas |
 | Highlighting | Resalta fila/columna/caja y numeros relacionados |
 
+### 2048 💎🕹️
+El clasico puzzle de fusion. Desliza las fichas para combinar numeros iguales y alcanza la legendaria ficha 2048. Dos skins tematicos disponibles.
+
+| Feature | Detalle |
+|---------|---------|
+| Skins | Gemas (fichas de colores con nombres de gemas) y LED Retro Display (estilo display neon) |
+| Gemas | 11 gemas unicas con colores, glow y nombres (Cuarzo, Ambar, Topacio, Rubi, Esmeralda, Zafiro, Amatista, Diamante, Opalo, Estrella, Legendaria) |
+| LED | 4 niveles de brillo (LO, MED, HI, MAX) con efecto neón, tipografia monospace y animacion flicker |
+| Super fichas | Continua despues de 2048 con fichas Cosmica/Mistica (Gemas) o Jackpot (LED) |
+| Controles | Flechas / WASD + swipe tactil |
+| Persistencia | Mejor puntaje en localStorage, skin preferida en localStorage |
+| Animaciones | Pop al aparecer, pulso al fusionar, brillo legendario en 2048+ |
+
 ---
 
 ## Estructura del Proyecto
@@ -83,10 +96,14 @@ MM3/
 │   ├── index.html          # Pagina del Memotest
 │   ├── style.css           # Estilos especificos del Memotest
 │   └── game.js             # Motor del Memotest + Pack Manager
-└── sudoku/
-    ├── index.html          # Pagina del Sudoku
-    ├── style.css           # Estilos especificos del Sudoku
-    └── game.js             # Generador + Motor del Sudoku
+├── sudoku/
+│   ├── index.html          # Pagina del Sudoku
+│   ├── style.css           # Estilos especificos del Sudoku
+│   └── game.js             # Generador + Motor del Sudoku
+└── 2048/
+    ├── index.html          # Pagina del 2048
+    ├── style.css           # Estilos del 2048 (gemas + LED skin)
+    └── game.js             # Motor del 2048 + Skin Manager
 ```
 
 ---
@@ -114,7 +131,7 @@ cat css/setup.sql
 
 **Tablas:**
 - `profiles` — datos de usuario (auto-creado al registrarse)
-- `game_scores` — puntajes globales por juego (match3, memotest, sudoku)
+- `game_scores` — puntajes globales por juego (match3, memotest, sudoku, 2048)
 - `memotest_configs` — packs compartidos por la comunidad (preparado para futuro)
 
 Todas con Row Level Security habilitado.
